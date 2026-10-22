@@ -1,0 +1,14 @@
+{
+  "name": "saigon-grappling-society",
+  "version": "1.0.0",
+  "description": "Website Saigon Grappling Society - Landing page tập thử BJJ & Striking",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0"
+  }
+}
