@@ -152,19 +152,3 @@
   }
 
 })();
-
-    /* Interactive 3D tilt for Saigon Community Banner */
-    const saigonBanner = document.querySelector(".saigon-banner");
-    if (saigonBanner && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      saigonBanner.addEventListener("mousemove", e => {
-        const rect = saigonBanner.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        saigonBanner.style.setProperty("--tilt-x", (y * -7).toFixed(2) + "deg");
-        saigonBanner.style.setProperty("--tilt-y", (x * 7).toFixed(2) + "deg");
-      });
-      saigonBanner.addEventListener("mouseleave", () => {
-        saigonBanner.style.setProperty("--tilt-x", "0deg");
-        saigonBanner.style.setProperty("--tilt-y", "0deg");
-      });
-    }

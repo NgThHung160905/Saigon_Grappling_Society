@@ -4,7 +4,7 @@
  * > type: Web app > Execute as: Me > Who has access: Anyone > Deploy. Copy URL dán vào CONFIG.endpoint trong index.html.
  */
 const SHEET_NAME = "Trial Registrations";
-const HEADERS = ["Timestamp", "Program", "Slot", "Name", "Phone", "Email", "Status"];
+const HEADERS = ["Timestamp", "Program", "Date", "Slot", "Name", "Phone", "Email", "Status"];
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
@@ -23,7 +23,7 @@ function doPost(e) {
     const row = sh.getLastRow() + 1;
     sh.getRange(row, phoneCol).setNumberFormat("@");
     sh.getRange(row, 1, 1, HEADERS.length).setValues([[
-      new Date(), d.program || "", d.slot || "", d.name || "", d.phone || "", d.email || "", "New"
+      new Date(), d.program || "", d.date || "", d.slot || "", d.name || "", d.phone || "", d.email || "", "New"
     ]]);
     return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {

@@ -32,7 +32,7 @@
         </span>
         <img src="images/10th-planet.png" alt="10th Planet Jiu Jitsu" class="top-logo-partner">
       </a>
-      <nav>
+      <nav class="top-nav">
         <a class="l" href="#thong-tin">Thông tin lớp học</a>
         <a class="l" href="#merchandise">Merchandise</a>
         <a class="btn sm" href="#dang-ky">Đăng ký ngay</a>
@@ -49,11 +49,14 @@
       </video>
       <div class="wrap">
         <div class="hero-crest">
-          <img class="star" src="images/tower-white.png" alt="Saigon Grappling Society">
-          <span class="crest-ground" aria-hidden="true"></span>
+          <img class="hero-logo" src="images/logo-white.png" alt="Saigon Grappling Society">
         </div>
-        <h1 class="t"><span>Train</span> <span>Roll</span> <span>Learn</span></h1>
-        <p class="sub">Già trẻ lớn bé đều có thể học võ và trưởng thành hơn thông qua Brazilian Jiu Jitsu</p>
+        <div class="hero-tag">Brazilian Jiu Jitsu</div>
+        <h1 class="t">
+          <span>Rèn thể lực</span>
+          <span>Luyện <em>trí lực</em></span>
+        </h1>
+        <p class="sub">Môn võ kết hợp sức mạnh, kỹ thuật và khả năng tư duy giải quyết vấn đề.</p>
         <div class="hero-cta">
           <a class="btn lime" href="#dang-ky">Đăng ký ngay</a>
           <a class="btn ghost" href="#lich">Xem lịch tập</a>
@@ -87,15 +90,24 @@
         <div class="pillars">
           <div class="pillar">
             <h3 class="t t-md">Fitness</h3>
-            <p>Khỏe hơn, bền hơn qua mỗi buổi tập.</p>
+            <div class="pillar-lead">~300–700 kcal</div>
+            <p class="pillar-note">Năng lượng tiêu hao ước tính trong 60 phút tập BJJ.</p>
+            <p class="pillar-desc">Một buổi tập phối hợp vận động toàn thân, sức bền, sức mạnh, khả năng phối hợp cơ thể
+              và trí óc</p>
           </div>
           <div class="pillar">
             <h3 class="t t-md">Defense</h3>
-            <p>Tự vệ bằng kỹ thuật, không chỉ sức mạnh.</p>
+            <div class="pillar-lead">TECHNIQUE OVER BRUTE FORCE.</div>
+            <p class="pillar-desc">Học cách tạo lợi thế bằng đòn bẩy, vị trí và khả năng kiểm soát.</p>
+            <p class="pillar-desc">BJJ giúp bạn luyện tập các tình huống đối kháng có kiểm soát và cho bạn khả năng tự
+              vệ dù bất lợi về mặt hình thể</p>
           </div>
           <div class="pillar">
-            <h3 class="t t-md">Focus</h3>
-            <p>Rèn tư duy, giữ bình tĩnh dưới áp lực.</p>
+            <h3 class="t t-md">Train Your Mind</h3>
+            <div class="pillar-lead">TRAIN YOUR BODY.<br>CHALLENGE YOUR MIND.</div>
+            <p class="pillar-desc">Không chỉ tập thể lực, bạn còn liên tục phải quan sát và ra quyết định.</p>
+            <p class="pillar-desc">Đây là một hình thức luyện tập kết hợp vận động và giải quyết vấn đề cùng một lúc,
+              đòi hỏi sự bình tĩnh tuyệt đối và đầu óc minh mẫn để đối phó với thử thách.</p>
           </div>
         </div>
       </div>
@@ -108,28 +120,10 @@
           <h2 class="t t-lg">Ai có thể tập<br>Jiu-Jitsu?</h2>
           <div class="age">
             <div class="n">5<sup>+</sup></div>
-            <p>Mọi người, từ 5 tuổi trở lên, không phân biệt giới tính, độ tuổi hay thể trạng.</p>
+            <p>Mọi người, từ 5 tuổi trở lên, không phân biệt giới tính, độ tuổi hay thể trạng hay ngành nghề.</p>
           </div>
         </div>
         <div class="roles" id="roles"></div>
-        <a href="https://www.facebook.com/profile.php?id=61594951304481" target="_blank" rel="noopener" class="quote saigon-banner" aria-label="Saigon Grappling Society Facebook">
-          <div class="saigon-glow" aria-hidden="true"></div>
-          <div class="saigon-frame">
-            <img src="images/Saigon.jpg" alt="Saigon Grappling Society · BJJ Grappling Community · Built in Saigon"
-              class="saigon-img" loading="lazy" decoding="async">
-            <div class="saigon-sheen" aria-hidden="true"></div>
-            <div class="saigon-vignette" aria-hidden="true"></div>
-            <div class="saigon-corners" aria-hidden="true">
-              <span class="c-tl"></span><span class="c-tr"></span>
-              <span class="c-bl"></span><span class="c-br"></span>
-            </div>
-            <div class="saigon-badge" aria-hidden="true">
-              <span class="saigon-dot"></span>
-              <span>EST. 2026 · SAIGON</span>
-            </div>
-          </a>
-          <p class="sr-only">Ai cũng đều có thể học Brazilian Jiu Jitsu</p>
-        </div>
       </div>
     </section>
 
@@ -181,15 +175,88 @@
     <!-- THỜI KHÓA BIỂU -->
     <section id="lich">
       <div class="wrap">
-        <div class="sec-head">
-          <h2 class="t t-lg">Thời khóa biểu</h2>
+
+        <!-- Hướng dẫn cho người mới bắt đầu -->
+        <div class="tt-guide-bar">
+          <div class="tt-guide-item">
+            <span class="tt-guide-tag gi">BJJ GI</span>
+            <div class="tt-guide-text">
+              <b>BJJ có võ phục (Gi)</b>
+            </div>
+          </div>
+          <div class="tt-guide-item">
+            <span class="tt-guide-tag nogi">BJJ NOGI</span>
+            <div class="tt-guide-text">
+              <b>BJJ không võ phục</b>
+            </div>
+          </div>
+          <div class="tt-guide-item">
+            <span class="tt-guide-tag str">STRIKING</span>
+            <div class="tt-guide-text">
+              <b>Đánh đứng</b>
+            </div>
+          </div>
+          <div class="tt-guide-item">
+            <span class="tt-guide-tag open">OPEN MAT</span>
+            <div class="tt-guide-text">
+              <b>Giao lưu</b>
+            </div>
+          </div>
         </div>
-        <div class="legend" id="legend"></div>
-        <div class="tt-grid-wrap">
-          <div class="tt-grid" id="tt-grid"></div>
+
+        <!-- Poster Box -->
+        <div class="tt-poster">
+
+          <!-- Cột thương hiệu bên trái (Brand Sidebar) -->
+          <div class="tt-poster-brand">
+            <div class="tt-brand-top">
+              <img src="images/logo-white.png" alt="Saigon Grappling Society" class="tt-brand-logo">
+              <div class="tt-brand-tags">GRAPPLING / PEOPLE / SAIGON</div>
+              <div class="tt-brand-line"></div>
+              <div class="tt-brand-moto">
+                <span>A MARTIAL ARTS</span>
+                <span>COMMUNITY</span>
+                <span>IN SAIGON</span>
+              </div>
+              <div class="tt-brand-est">EST. 2026</div>
+            </div>
+            <div class="tt-brand-watermark" aria-hidden="true">
+              <img src="images/mono-white.png" alt="">
+            </div>
+          </div>
+
+          <!-- Khu vực bảng thời khóa biểu bên phải (Schedule Board) -->
+          <div class="tt-poster-main">
+
+            <!-- Poster Header -->
+            <div class="tt-poster-head">
+              <div class="tt-head-left">
+                <div class="tt-lime-bar"></div>
+                <h2 class="tt-poster-title">THỜI KHÓA BIỂU</h2>
+                <div class="tt-poster-sub">WEEKLY SCHEDULE <span class="tt-arrow">↘</span></div>
+              </div>
+            </div>
+
+            <!-- Table Grid Wrap -->
+            <div class="tt-grid-wrap">
+              <div class="tt-grid" id="tt-grid"></div>
+            </div>
+
+            <!-- Poster Footer Bar -->
+            <div class="tt-poster-foot">
+              <div class="tt-foot-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" />
+                  <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span>LỊCH TẬP THAM KHẢO - CÓ THỂ THAY ĐỔI</span>
+              </div>
+              <div class="tt-foot-motto">/// UNLOCK A NEW SKILL WITH SGS</div>
+            </div>
+
+          </div>
         </div>
-        <div class="tt-list" id="tt-list"></div>
-        <p class="tt-note" id="tt-note"></p>
+
       </div>
     </section>
 
@@ -248,6 +315,24 @@
                 </div>
               </div>
             </div>
+            <div class="field date-field">
+              <label for="date">Chọn ngày <span class="date-format-hint">(DD/MM/YY)</span></label>
+              <div class="date-input-wrap">
+                <input type="text" id="date" name="date" placeholder="DD/MM/YY" inputmode="numeric" maxlength="8"
+                  autocomplete="off" required>
+                <input type="date" id="date-native" tabindex="-1" aria-hidden="true">
+                <button type="button" class="date-picker-btn" id="date-btn" aria-label="Mở lịch chọn ngày">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </button>
+              </div>
+              <div class="err" data-err="date"></div>
+            </div>
             <div class="field"><label for="slot">Khung giờ</label><select id="slot" name="slot" required></select>
               <div class="err" data-err="slot"></div>
             </div>
@@ -286,6 +371,10 @@
                 <div>
                   <dt>SĐT</dt>
                   <dd id="tk-phone"></dd>
+                </div>
+                <div>
+                  <dt>Ngày tập</dt>
+                  <dd id="tk-date"></dd>
                 </div>
                 <div>
                   <dt>Lớp đã đăng ký</dt>
@@ -353,7 +442,7 @@
               <path
                 d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.68 1 1 0 01-.24 1.02l-2.23 2.09z" />
             </svg>
-            <a href="tel:0559434418" id="foot-phone">0559 434 418</a>
+            <a href="tel:0559434418" id="foot-phone">055 943 4418</a>
           </div>
           <div class="foot-row">
             <svg class="foot-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -379,8 +468,8 @@
                 </radialGradient>
               </defs>
             </svg>
-            <a href="https://www.facebook.com/profile.php?id=61594951304481" target="_blank" rel="noopener" aria-label="Facebook"
-              class="social-link social-fb">
+            <a href="https://www.facebook.com/profile.php?id=61594951304481" target="_blank" rel="noopener"
+              aria-label="Facebook" class="social-link social-fb">
               <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
                 <path fill="currentColor"
                   d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z" />
@@ -435,17 +524,24 @@
         { name: "Tên huấn luyện viên", title: "Coach", disc: "BJJ", belt: "brown", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
         { name: "Tên huấn luyện viên", title: "Coach", disc: "BJJ", belt: "purple", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
         { name: "Tên huấn luyện viên", title: "Head Coach", disc: "Striking", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
-        { name: "Tạ Quang Hải", title: "Coach", disc: "Striking", img: "images/Tạ Quang Hải.jpg", link: "https://www.facebook.com/photo?fbid=122113529673498376&set=a.122108037897498376", ach: ["Huấn luyện viên Striking SGS", "Kỹ thuật đòn tay, chân và phòng thủ", "Kinh nghiệm thi đấu & đào tạo học viên"] }
+        {
+          name: "Tạ Quang Hải", title: "Coach", disc: "Striking", img: "images/Tạ Quang Hải.jpg", link: "https://www.facebook.com/photo?fbid=122113529673498376&set=a.122108037897498376", ach: [
+            "Cựu võ sĩ LION Championship (MMA 1-1-0)",
+            "Huy chương bạc 🥈 nội dung full contact tại giải vô địch các câu lạc bộ jiujitsu quốc gia năm 2024"
+          ]
+        }
       ],
 
-      // Thời khóa biểu theo visual (T2 đến T7). Các khung giờ nghỉ cả tuần (7:00-10:00, 14:00-15:00) được ẩn.
-      // gi | nogi | gn (Gi/Nogi + Full sparring) | str (Striking) | open (Open mat) | null (nghỉ)
-      days: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"],
+      // Thời khóa biểu chuẩn theo poster SGS (T2 đến T7)
+      // BJJ NOGI | BJJ GI | GI / NOGI (Full sparring) | STRIKING | OPEN MAT | OFF
+      days: ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"],
       timetable: [
+        { period: "Sáng", time: "7:00 - 10:00", cells: [null, null, null, null, null, null] },
         { period: "Sáng", time: "10:00 - 12:00", cells: ["nogi", "gi", "nogi", "gi", "nogi", "nogi"] },
-        { period: "Trưa", time: "12:00 - 14:00", cells: ["gn", "gn", "gn", "gn", "gn", null] },
+        { period: "Trưa", time: "12:00 - 14:00", cells: ["gn", "gn", "nogi_sp", "gn", "gn", null] },
+        { period: "Chiều", time: "14:00 - 15:00", cells: [null, null, null, null, null, null] },
         { period: "Chiều", time: "15:00 - 17:00", cells: [null, null, null, null, null, "open"] },
-        { period: "Tối", time: "18:00 - 19:15", note: "Fundamental - Cơ bản", cells: ["nogi", "nogi", "gi", "nogi", "nogi", "gi"] },
+        { period: "Tối", time: "18:00 - 19:15", note: "Fundamental", cells: ["nogi", "nogi", "gi", "nogi", "nogi", "gi"] },
         { period: "Tối", time: "19:30 - 21:00", note: "Competition", cells: ["nogi", "str", "gi", "str", "nogi", "str"] }
       ],
       timetableNote: "Thời khóa biểu có thể thay đổi.",
@@ -505,7 +601,7 @@
       el.setAttribute("aria-label", `${c.name}, ${c.title} ${c.disc}. Xem thành tích`);
       const belt = c.belt ? `<div class="belt"><i style="--bc:${BELT[c.belt]}"></i>${BELT_VN[c.belt]}</div>` : "";
       const imgSrc = c.img || `images/coach-${i + 1}.jpg`;
-  el.innerHTML = `<img class="mk" src="images/mono-white.png" alt=""><img class="ph" src="${encodeURI(imgSrc)}" onerror="this.src='${imgSrc}'; this.onerror=function(){this.remove();}" alt="${esc(c.name)}" onerror="this.remove()"><span class="hint">+</span>
+      el.innerHTML = `<img class="mk" src="images/mono-white.png" alt=""><img class="ph" src="${encodeURI(imgSrc)}" onerror="this.src='${imgSrc}'; this.onerror=function(){this.remove();}" alt="${esc(c.name)}" onerror="this.remove()"><span class="hint">+</span>
     <div class="info"><span class="chip-role">${esc(c.title)} · ${esc(c.disc)}</span><h3>${esc(c.name)}</h3>${belt}</div>
     <div class="ach"><span class="k">${esc(c.title)} · ${esc(c.disc)}</span><div class="nm">${esc(c.name)}</div><span class="k">Thành tích</span><ul>${c.ach.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>`;
       if (!c.link) {
@@ -521,24 +617,33 @@
 
     /* ---- Thời khóa biểu ---- */
     const TYPES = {
-      gi: { label: "Gi", cls: "gi", kind: "b" },
-      nogi: { label: "Nogi", cls: "nogi", kind: "b" },
-      gn: { label: "Gi / Nogi", cls: "gn", kind: "b", sub: "Full sparring", trial: false },
-      str: { label: "Striking", cls: "str", kind: "s" },
-      open: { label: "Open mat", cls: "open", kind: "o", sub: "Gi / Nogi", trial: false }
+      gi: { label: "BJJ GI", cls: "gi", kind: "b" },
+      nogi: { label: "BJJ NOGI", cls: "nogi", kind: "b" },
+      gn: { label: "GI / NOGI", cls: "gn", kind: "b", sub: "FULL SPARRING", trial: false },
+      nogi_sp: { label: "NOGI", cls: "nogi-sp", kind: "b", sub: "FULL SPARRING", trial: false },
+      str: { label: "STRIKING", cls: "str", kind: "s" },
+      open: { label: "OPEN MAT", cls: "open", kind: "o", sub: "GI / NOGI", trial: false }
     };
-    const tag = k => `<span class="tag ${TYPES[k].cls}">${TYPES[k].label}</span>` + (TYPES[k].sub ? `<span class="sub">${TYPES[k].sub}</span>` : "");
-    $("#legend").innerHTML = ["gi", "nogi", "gn", "str", "open"].map(k => `<span class="tag ${TYPES[k].cls}">${TYPES[k].label}</span>`).join("");
-    let g = `<div class="h top-corner"><svg class="diag-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100" vector-effect="non-scaling-stroke" /></svg></div>` + CONFIG.days.map(d => `<div class="h">${d}</div>`).join("");
-    CONFIG.timetable.forEach(r => {
-      g += `<div class="tm"><b>${r.time}</b><span>${r.period}</span>${r.note ? `<em class="nt">${r.note}</em>` : ""}</div>` + r.cells.map(c => c ? `<div>${tag(c)}</div>` : `<div class="off" aria-label="Trống">X</div>`).join("");
-    });
-    $("#tt-grid").innerHTML = g;
-    $("#tt-list").innerHTML = CONFIG.days.map((d, di) => {
-      const rows = CONFIG.timetable.filter(r => r.cells[di]).map(r => `<div class="r"><div><b>${r.time}</b><em>${r.period}</em>${r.note ? `<span class="nt">${r.note}</span>` : ""}</div><div class="rt">${tag(r.cells[di])}</div></div>`).join("");
-      return `<div class="tt-day"><h3>${d}</h3>${rows || '<div class="r"><em>Nghỉ</em></div>'}</div>`;
-    }).join("");
-    $("#tt-note").textContent = CONFIG.timetableNote;
+    const tag = k => {
+      const t = TYPES[k];
+      if (!t) return "";
+      if (k === "open") {
+        return `<div class="cell-open"><span class="open-title">${t.label}</span><span class="open-sub">${t.sub}</span></div>`;
+      }
+      return `<div class="cell-class ${t.cls}"><span class="c-title">${t.label}</span>` +
+        (t.sub ? `<span class="c-sub">${t.sub}</span>` : "") +
+        `</div>`;
+    };
+
+    const ttGrid = $("#tt-grid");
+    if (ttGrid) {
+      let g = `<div class="tt-cell th th-time">TIME</div>` + CONFIG.days.map(d => `<div class="tt-cell th">${d.toUpperCase()}</div>`).join("");
+      CONFIG.timetable.forEach(r => {
+        g += `<div class="tt-cell tm"><span class="tm-time">${r.time}</span>${r.note ? `<span class="tm-note">${r.note}</span>` : ""}</div>` +
+          r.cells.map(c => c ? `<div class="tt-cell has-class">${tag(c)}</div>` : `<div class="tt-cell cell-off">OFF</div>`).join("");
+      });
+      ttGrid.innerHTML = g;
+    }
 
     /* ---- Membership ---- */
     const P = CONFIG.pricing;
@@ -566,22 +671,104 @@
 
     /* ---- Form đăng ký ---- */
     const form = $("#form"), slotSel = $("#slot"), ticket = $("#ticket");
+    const dateInput = $("#date"), dateNative = $("#date-native"), dateBtn = $("#date-btn");
+
+    if (dateNative) {
+      const today = new Date();
+      dateNative.min = today.toISOString().split("T")[0];
+
+      dateNative.addEventListener("change", () => {
+        if (!dateNative.value) return;
+        const [y, m, d] = dateNative.value.split("-");
+        dateInput.value = `${d}/${m}/${y.slice(-2)}`;
+        $("[data-err=date]").textContent = "";
+        fillSlots();
+      });
+    }
+
+    if (dateBtn && dateNative) {
+      dateBtn.addEventListener("click", () => {
+        try {
+          if (typeof dateNative.showPicker === "function") dateNative.showPicker();
+          else dateNative.focus();
+        } catch (e) {
+          dateNative.focus();
+        }
+      });
+    }
+
+    if (dateInput) {
+      dateInput.addEventListener("input", () => {
+        let v = dateInput.value.replace(/\D/g, "").slice(0, 6);
+        if (v.length >= 4) {
+          v = v.slice(0, 2) + "/" + v.slice(2, 4) + "/" + v.slice(4);
+        } else if (v.length >= 2) {
+          v = v.slice(0, 2) + "/" + v.slice(2);
+        }
+        dateInput.value = v;
+        fillSlots();
+      });
+    }
+
     function fillSlots() {
       const kind = form.program.value === "BJJ" ? "b" : "s";
+      const prevSlot = slotSel.value;
       slotSel.innerHTML = '<option value="">Chọn khung giờ</option>';
+      const seen = new Set();
+
+      let targetDayIdx = -1;
+      const dateVal = (dateInput && dateInput.value || "").trim();
+      const m = /^(\d{2})\/(\d{2})\/(\d{2})$/.exec(dateVal);
+      if (m) {
+        const d = parseInt(m[1], 10), mo = parseInt(m[2], 10) - 1, yr = 2000 + parseInt(m[3], 10);
+        const dt = new Date(yr, mo, d);
+        if (!isNaN(dt.getTime())) {
+          const day = dt.getDay(); // 0 = CN, 1 = T2, 2 = T3, 3 = T4, 4 = T5, 5 = T6, 6 = T7
+          if (day >= 1 && day <= 6) {
+            targetDayIdx = day - 1;
+          } else if (day === 0) {
+            const o = document.createElement("option");
+            o.value = "";
+            o.textContent = "Chủ Nhật: Phòng tập nghỉ (OFF)";
+            o.disabled = true;
+            slotSel.appendChild(o);
+            return;
+          }
+        }
+      }
+
       CONFIG.timetable.forEach(r => r.cells.forEach((c, di) => {
+        if (targetDayIdx !== -1 && di !== targetDayIdx) return;
         const T = c && TYPES[c];
         if (!T || T.kind !== kind || T.trial === false) return;
+        const txt = `${r.time}` + (kind === "b" ? ` · ${T.label}` + (r.note ? ` (${r.note})` : "") : "");
+        if (seen.has(txt)) return;
+        seen.add(txt);
         const o = document.createElement("option");
-        const txt = `${CONFIG.days[di]} · ${r.time}` + (kind === "b" ? ` · ${T.label}` : "") + (r.note ? ` (${r.note})` : "");
-        o.value = txt; o.textContent = txt;
+        o.value = txt;
+        o.textContent = txt;
         slotSel.appendChild(o);
       }));
+
+      if (prevSlot && [...slotSel.options].some(o => o.value === prevSlot)) {
+        slotSel.value = prevSlot;
+      }
     }
     form.querySelectorAll("input[name=program]").forEach(r => r.addEventListener("change", fillSlots));
     fillSlots();
 
     const rules = {
+      date: v => {
+        const val = (v || "").trim();
+        if (!val) return "Vui lòng chọn hoặc nhập ngày tập.";
+        const m = /^(\d{2})\/(\d{2})\/(\d{2})$/.exec(val);
+        if (!m) return "Định dạng ngày phải là DD/MM/YY (VD: 24/10/26).";
+        const day = parseInt(m[1], 10), month = parseInt(m[2], 10), yr = parseInt(m[3], 10);
+        if (month < 1 || month > 12) return "Tháng không hợp lệ (01–12).";
+        const daysInMonth = new Date(2000 + yr, month, 0).getDate();
+        if (day < 1 || day > daysInMonth) return `Ngày không hợp lệ trong tháng ${month}.`;
+        return "";
+      },
       slot: v => v ? "" : "Chọn một khung giờ.",
       name: v => v.trim().length >= 2 ? "" : "Nhập họ và tên.",
       phone: v => /^(\+?84|0)\d{9}$/.test(v.replace(/[\s.\-]/g, "")) ? "" : "Số điện thoại chưa đúng (VD: 0901234567).",
@@ -596,7 +783,7 @@
       if (!ok) { const f = form.querySelector(".err:not(:empty)"); f && f.previousElementSibling.focus(); return; }
       if (form.website.value) return;
       const data = {
-        program: form.program.value, slot: form.slot.value, name: form.name.value.trim(),
+        program: form.program.value, date: form.date.value.trim(), slot: form.slot.value, name: form.name.value.trim(),
         phone: form.phone.value.replace(/[\s.\-]/g, ""), email: form.email.value.trim(), submittedAt: new Date().toISOString()
       };
       const btn = $("#submit"); btn.disabled = true; btn.textContent = "Đang gửi...";
@@ -605,6 +792,7 @@
         else console.log("Chế độ thử:", data);
         $("#tk-name").textContent = data.name;
         $("#tk-phone").textContent = data.phone;
+        $("#tk-date").textContent = data.date;
         $("#tk-class").textContent = data.program + " · " + data.slot;
         $("#tk-dev").hidden = !!CONFIG.endpoint;
         form.hidden = true; ticket.hidden = false;
