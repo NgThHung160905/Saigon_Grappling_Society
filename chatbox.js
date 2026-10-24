@@ -7,7 +7,7 @@ import { sendChatMessage, PROVIDERS } from "./ai-service.js";
 // Trạng thái hội thoại
 let state = {
   isOpen: false,
-  provider: import.meta.env?.VITE_DEFAULT_AI_PROVIDER || "gemini",
+  provider: import.meta.env?.VITE_DEFAULT_AI_PROVIDER || "groq",
   isGenerating: false,
   abortController: null,
   messages: []
@@ -279,7 +279,8 @@ export function initChatbox() {
       if (err.name === "AbortError") {
         appendMessage("assistant", "*(Đã dừng câu trả lời)*");
       } else {
-        appendMessage("assistant", "⚠️ Hệ thống AI hiện đang xử lý nhiều lượt yêu cầu hoặc tạm thời gián đoạn. Vui lòng thử lại sau ít giây.");
+        const errorText = err && err.message ? err.message : "Hệ thống AI hiện đang xử lý nhiều lượt yêu cầu. Vui lòng thử lại sau ít giây.";
+        appendMessage("assistant", `⚠️ ${errorText}`);
         console.error("AI Service Error:", err);
       }
     } finally {

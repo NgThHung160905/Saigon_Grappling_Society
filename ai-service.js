@@ -9,7 +9,7 @@ Bạn trả lời thân thiện, nhiệt tình, chuẩn xác theo tinh thần v�
 DƯỚI ĐÂY LÀ THÔNG TIN CHÍNH THỨC CỦA SAIGON GRAPPLING SOCIETY (SGS):
 1. ĐỊA CHỈ & LIÊN HỆ:
 - Địa chỉ: 36 Đường A4, Phường Bảy Hiền, TP. Hồ Chí Minh.
-- Hotline / Điện thoại: 055 943 4418 hoặc 0931 439 946
+- Hotline / Điện thoại: 055 943 4418
 - Email: saigongrapplingsociety@gmail.com
 - Đăng ký tập thử: Khách có thể điền form "Đăng ký tập thử 1 buổi" ngay phía dưới trang web.
 
@@ -141,10 +141,13 @@ async function callGeminiStream({ apiKey, model, messages, onChunk, signal }) {
       err.status = 404;
       throw err;
     }
+    if (response.status === 429) {
+      const err = new Error(`RATE_LIMIT:${model}`);
+      err.status = 429;
+      throw err;
+    }
     if (response.status === 400 && errDetail.toLowerCase().includes("api_key")) {
       throw new Error("API Key không hợp lệ hoặc đã hết hạn. Vui lòng kiểm tra lại Google Gemini API Key.");
-    } else if (response.status === 429) {
-      throw new Error("Đã vượt quá giới hạn lượt gọi (Rate Limit) của gói miễn phí. Vui lòng đợi ít giây rồi thử lại.");
     }
     throw new Error(`Lỗi Gemini API (${response.status}): ${errDetail}`);
   }
@@ -265,32 +268,61 @@ async function callGroqStream({ apiKey, model, messages, onChunk, signal }) {
  * Hàm điều phối chính gửi tin nhắn
  */
 export async function sendChatMessage({ provider = "gemini", model, messages, onChunk, signal }) {
-  const apiKey = getApiKey(provider);
-
-  if (!apiKey) {
-    const pInfo = PROVIDERS[provider] || PROVIDERS.gemini;
-    throw new Error(`MISSING_API_KEY:${provider}:${pInfo.name}:${pInfo.keyDocUrl}`);
-  }
-
+  // 1. Thử nhà cung cấp chính được cấu hình
+  const primaryKey = getApiKey(provider);
   const pConfig = PROVIDERS[provider] || PROVIDERS.gemini;
   const modelsToTry = model ? [model] : (pConfig.fallbackModels || [pConfig.defaultModel]);
 
   let lastError = null;
-  for (const m of modelsToTry) {
-    try {
-      if (provider === "groq") {
-        return await callGroqStream({ apiKey, model: m, messages, onChunk, signal });
-      } else {
-        return await callGeminiStream({ apiKey, model: m, messages, onChunk, signal });
-      }
-    } catch (err) {
-      if (err.message && err.message.startsWith("MODEL_NOT_FOUND")) {
+
+  if (primaryKey) {
+    for (const m of modelsToTry) {
+      try {
+        if (provider === "groq") {
+          return await callGroqStream({ apiKey: primaryKey, model: m, messages, onChunk, signal });
+        } else {
+          return await callGeminiStream({ apiKey: primaryKey, model: m, messages, onChunk, signal });
+        }
+      } catch (err) {
         lastError = err;
-        continue;
+        const msg = err.message || "";
+        // Nếu là lỗi Rate Limit (429) hoặc Model Not Found (404), tự động thử tiếp model tiếp theo
+        if (err.status === 429 || err.status === 404 || msg.includes("RATE_LIMIT") || msg.includes("MODEL_NOT_FOUND")) {
+          console.warn(`[AI Service] Model ${m} gặp lỗi (${msg}), đang chuyển sang model dự phòng tiếp theo...`);
+          continue;
+        }
+        break; // Các lỗi khác (như API key sai hoàn toàn) thì dừng
       }
-      throw err;
     }
   }
 
-  throw lastError || new Error("Không thể kết nối đến mô hình AI.");
+  // 2. Tự động chuyển đổi thông minh (Fallback) sang nhà cung cấp phụ nếu có cấu hình
+  const fallbackProvider = provider === "gemini" ? "groq" : "gemini";
+  const fallbackKey = getApiKey(fallbackProvider);
+  if (fallbackKey) {
+    const fbConfig = PROVIDERS[fallbackProvider];
+    const fbModels = fbConfig.fallbackModels || [fbConfig.defaultModel];
+    console.log(`[AI Service] Tự động chuyển sang nhà cung cấp dự phòng: ${fbConfig.name}...`);
+    for (const fbM of fbModels) {
+      try {
+        if (fallbackProvider === "groq") {
+          return await callGroqStream({ apiKey: fallbackKey, model: fbM, messages, onChunk, signal });
+        } else {
+          return await callGeminiStream({ apiKey: fallbackKey, model: fbM, messages, onChunk, signal });
+        }
+      } catch (fbErr) {
+        console.warn(`[AI Service] Fallback ${fallbackProvider} (${fbM}) gặp lỗi:`, fbErr);
+      }
+    }
+  }
+
+  if (lastError) {
+    const msg = lastError.message || "";
+    if (lastError.status === 429 || msg.includes("RATE_LIMIT") || msg.includes("Rate Limit")) {
+      throw new Error("Lượt gọi AI miễn phí trong phút này đã hết quota (Rate Limit). Vui lòng đợi khoảng 15-20 giây rồi gửi lại, hoặc kiểm tra lại Groq API Key.");
+    }
+    throw lastError;
+  }
+
+  throw new Error("Chưa cấu hình API Key trong file .env hoặc Vercel (VITE_GEMINI_API_KEY hoặc VITE_GROQ_API_KEY).");
 }
