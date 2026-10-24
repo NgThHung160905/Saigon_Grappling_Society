@@ -54,15 +54,15 @@ DƯỚI ĐÂY LÀ THÔNG TIN CHÍNH THỨC CỦA SAIGON GRAPPLING SOCIETY (SGS):
 - Coach Tạ Quang Hải: Huấn luyện viên Striking, cựu võ sĩ giải MMA chuyên nghiệp LION Championship (thành tích 1-1-0), Huy chương Bạc nội dung full contact tại Giải vô địch các CLB Jiu Jitsu quốc gia năm 2024.
 
 NGUYÊN TẮC TRẢ LỜI:
-- Khi người dùng hỏi về lịch tập, học phí, địa chỉ hay cách đăng ký, bạn hãy trả lời chính xác, rõ ràng dựa trên dữ liệu SGS ở trên.
-- Nếu người dùng hỏi những câu hỏi ngoài lề (khoa học, đời sống, v.v.), bạn vẫn giải đáp thông minh, lịch sự.
-- Định dạng Markdown đẹp mắt: dùng gạch đầu dòng, in đậm các ý chính để người đọc dễ theo dõi trên điện thoại.`;
+- Phản hồi cực nhanh: Đi thẳng vào trọng tâm câu hỏi, ngắn gọn, súc tích, không chào hỏi dông dài.
+- Khi người dùng hỏi về lịch tập, học phí, địa chỉ hay cách đăng ký, trả lời chính xác, rõ ràng theo dữ liệu SGS ở trên.
+- Định dạng Markdown đẹp mắt: gạch đầu dòng ngắn gọn, in đậm thông tin quan trọng để người đọc dễ nắm bắt ngay.`;
 
 export const PROVIDERS = {
   gemini: {
     name: "Google Gemini",
     defaultModel: "gemini-2.5-flash",
-    fallbackModels: ["gemini-2.5-flash", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-1.5-flash"],
+    fallbackModels: ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-flash-latest"],
     description: "Gemini 2.5 Flash (Google AI Studio - Free Tier)",
     keyDocUrl: "https://aistudio.google.com/app/apikey",
     envKey: "VITE_GEMINI_API_KEY",
@@ -70,9 +70,9 @@ export const PROVIDERS = {
   },
   groq: {
     name: "Groq Cloud",
-    defaultModel: "llama-3.3-70b-versatile",
-    fallbackModels: ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
-    description: "Llama 3.3 70B (Tốc độ phản hồi cực nhanh, Free Tier)",
+    defaultModel: "qwen/qwen3.8-27b",
+    fallbackModels: ["qwen/qwen3.8-27b", "openai/gpt-oss-20b", "openai/gpt-oss-120b"],
+    description: "Qwen 3.8 27B (Tốc độ siêu nhanh ~400ms, Free Tier)",
     keyDocUrl: "https://console.groq.com/keys",
     envKey: "VITE_GROQ_API_KEY",
     storageKey: "ai_key_groq"
@@ -116,8 +116,11 @@ async function callGeminiStream({ apiKey, model, messages, onChunk, signal }) {
       parts: [{ text: SYSTEM_INSTRUCTION }]
     },
     generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 2048
+      temperature: 0.6,
+      maxOutputTokens: 1024,
+      thinkingConfig: {
+        thinkingBudget: 0
+      }
     }
   };
 
@@ -201,10 +204,10 @@ async function callGroqStream({ apiKey, model, messages, onChunk, signal }) {
   ];
 
   const payload = {
-    model: model || "llama-3.3-70b-versatile",
+    model: model || "qwen/qwen3.8-27b",
     messages: chatMessages,
-    temperature: 0.7,
-    max_tokens: 2048,
+    temperature: 0.6,
+    max_tokens: 1024,
     stream: true
   };
 
@@ -225,6 +228,16 @@ async function callGroqStream({ apiKey, model, messages, onChunk, signal }) {
       errDetail = errJson.error?.message || response.statusText;
     } catch (_) {
       errDetail = await response.text();
+    }
+    if (response.status === 404) {
+      const err = new Error(`MODEL_NOT_FOUND:${model}`);
+      err.status = 404;
+      throw err;
+    }
+    if (response.status === 429) {
+      const err = new Error(`RATE_LIMIT:${model}`);
+      err.status = 429;
+      throw err;
     }
     throw new Error(`Lỗi Groq API (${response.status}): ${errDetail}`);
   }
