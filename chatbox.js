@@ -4,6 +4,13 @@
  */
 import { sendChatMessage, PROVIDERS } from "./ai-service.js";
 
+// Tự động nhận URL Google Sheet từ biến môi trường .env (nếu có)
+if (typeof window !== "undefined" && window.CONFIG && !window.CONFIG.endpoint) {
+  if (import.meta.env?.VITE_GOOGLE_SHEET_ENDPOINT) {
+    window.CONFIG.endpoint = import.meta.env.VITE_GOOGLE_SHEET_ENDPOINT;
+  }
+}
+
 // Trạng thái hội thoại
 let state = {
   isOpen: false,

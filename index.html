@@ -507,7 +507,7 @@
   <script>
     /* ============ CẤU HÌNH: sửa nội dung ở đây ============ */
     const CONFIG = {
-      endpoint: "",   // URL Web App của Apps Script (xem apps-script.gs). Để trống = chế độ thử.
+      endpoint: "https://script.google.com/macros/s/AKfycbwnw3IAtyxlG6oeiYb1vcygVnu05YtnXHU5FA_DroimnN_Iutd8J6CEc7FOXSSuxmOf/exec",
 
       address: {
         name: "Saigon Grappling Society",
@@ -588,6 +588,7 @@
         { name: "SGS Genesis", sub: "Rashguard tay dài và tay ngắn", img: "images/merch-rash.jpg", url: "" }
       ]
     };
+    window.CONFIG = CONFIG;
     /* ======================================================= */
     const $ = (s, r = document) => r.querySelector(s);
     const vnd = n => n.toLocaleString("en-US") + "<small>đ</small>";
