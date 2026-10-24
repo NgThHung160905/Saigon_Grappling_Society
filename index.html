@@ -318,10 +318,9 @@
             </div>
             <div class="field date-field">
               <label for="date">Chọn ngày <span class="date-format-hint">(DD/MM/YY)</span></label>
-              <div class="date-input-wrap">
+              <div class="date-input-wrap" id="date-wrap">
                 <input type="text" id="date" name="date" placeholder="DD/MM/YY" inputmode="numeric" maxlength="8"
                   autocomplete="off" required>
-                <input type="date" id="date-native" tabindex="-1" aria-hidden="true">
                 <button type="button" class="date-picker-btn" id="date-btn" aria-label="Mở lịch chọn ngày">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round" aria-hidden="true">
@@ -331,7 +330,29 @@
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
                 </button>
+
+                <!-- Custom Calendar Popover -->
+                <div class="cal-popover" id="cal-popover" hidden>
+                  <div class="cal-popover-head">
+                    <button type="button" class="cal-popover-btn" id="cal-prev" aria-label="Tháng trước">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <div class="cal-popover-title" id="cal-title"></div>
+                    <button type="button" class="cal-popover-btn" id="cal-next" aria-label="Tháng sau">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  </div>
+                  <div class="cal-weekdays">
+                    <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
+                  </div>
+                  <div class="cal-days" id="cal-days"></div>
+                  <div class="cal-info" id="cal-info">
+                    <span class="cal-info-dot" id="cal-info-dot"></span>
+                    <span id="cal-info-text">Chỉ hiện ngày có lớp</span>
+                  </div>
+                </div>
               </div>
+              <div class="date-quick-wrap" id="date-quick-wrap"></div>
               <div class="err" data-err="date"></div>
             </div>
             <div class="field"><label for="slot">Khung giờ</label><select id="slot" name="slot" required></select>
@@ -686,33 +707,201 @@
 
     /* ---- Form đăng ký ---- */
     const form = $("#form"), slotSel = $("#slot"), ticket = $("#ticket");
-    const dateInput = $("#date"), dateNative = $("#date-native"), dateBtn = $("#date-btn");
+    const dateInput = $("#date"), dateBtn = $("#date-btn");
+    const calPopover = $("#cal-popover"), calDays = $("#cal-days"), calTitle = $("#cal-title");
+    const calPrev = $("#cal-prev"), calNext = $("#cal-next"), calInfoText = $("#cal-info-text");
+    const dateQuickWrap = $("#date-quick-wrap");
 
-    if (dateNative) {
+    let calDate = new Date();
+    calDate.setDate(1);
+
+    function getSelectedProgram() {
+      return (form.program && form.program.value) || "BJJ";
+    }
+
+    function formatDateDDMMYY(d) {
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const year = String(d.getFullYear()).slice(-2);
+      return `${day}/${month}/${year}`;
+    }
+
+    function parseDateDDMMYY(str) {
+      const m = /^(\d{2})\/(\d{2})\/(\d{2})$/.exec((str || "").trim());
+      if (!m) return null;
+      const d = parseInt(m[1], 10), mo = parseInt(m[2], 10) - 1, yr = 2000 + parseInt(m[3], 10);
+      const dt = new Date(yr, mo, d);
+      return isNaN(dt.getTime()) ? null : dt;
+    }
+
+    function isDateAvailableForProgram(dateObj, program) {
+      const todayZero = new Date();
+      todayZero.setHours(0, 0, 0, 0);
+      const checkDate = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+      if (checkDate < todayZero) return false;
+      const dow = checkDate.getDay(); // 0: CN, 1: T2, 2: T3, 3: T4, 4: T5, 5: T6, 6: T7
+      if (dow === 0) return false; // Chủ Nhật phòng tập nghỉ
+      if (program === "Striking") {
+        return dow === 2 || dow === 4 || dow === 6; // Chỉ Thứ 3, Thứ 5, Thứ 7
+      }
+      return true; // BJJ từ Thứ 2 đến Thứ 7
+    }
+
+    function renderCalendar() {
+      if (!calPopover || calPopover.hidden) return;
+      const program = getSelectedProgram();
+      const currentYear = calDate.getFullYear();
+      const currentMonth = calDate.getMonth();
+
+      calTitle.textContent = `Tháng ${currentMonth + 1}, ${currentYear}`;
+      if (program === "Striking") {
+        calInfoText.textContent = "Chỉ mở lớp vào Thứ 3, Thứ 5, Thứ 7 (19:30 - 21:00)";
+      } else {
+        calInfoText.textContent = "Lớp BJJ mở từ Thứ 2 đến Thứ 7 (Chủ Nhật nghỉ)";
+      }
+
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const offset = (firstDay === 0 ? 6 : firstDay - 1); // Bắt đầu từ Thứ 2
+      const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+      const todayZero = new Date();
+      todayZero.setHours(0, 0, 0, 0);
+
+      const parsedSelected = parseDateDDMMYY(dateInput.value);
+
+      calDays.innerHTML = "";
+
+      for (let i = 0; i < offset; i++) {
+        const span = document.createElement("span");
+        span.className = "cal-day empty";
+        calDays.appendChild(span);
+      }
+
+      for (let d = 1; d <= totalDays; d++) {
+        const cellDate = new Date(currentYear, currentMonth, d);
+        const dow = cellDate.getDay();
+        const isPast = cellDate < todayZero;
+        const isToday = cellDate.getTime() === todayZero.getTime();
+        const isSelected = parsedSelected && (
+          cellDate.getDate() === parsedSelected.getDate() &&
+          cellDate.getMonth() === parsedSelected.getMonth() &&
+          cellDate.getFullYear() === parsedSelected.getFullYear()
+        );
+        const isAvailable = isDateAvailableForProgram(cellDate, program);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cal-day";
+        btn.textContent = d;
+
+        if (isToday) btn.classList.add("is-today");
+
+        if (!isAvailable) {
+          btn.classList.add("disabled");
+          btn.disabled = true;
+          if (dow === 0) {
+            btn.title = "Chủ Nhật: Phòng tập nghỉ (OFF)";
+          } else if (program === "Striking") {
+            btn.title = "Không có lớp Striking (Chỉ mở T3, T5, T7)";
+          } else if (isPast) {
+            btn.title = "Ngày đã qua";
+          }
+        } else {
+          btn.classList.add("available");
+          if (program === "Striking") {
+            btn.classList.add("striking");
+            btn.title = "Lớp Striking: 19:30 - 21:00";
+          } else {
+            btn.title = "Có lớp BJJ";
+          }
+          if (isSelected) btn.classList.add("selected");
+
+          btn.addEventListener("click", () => {
+            dateInput.value = formatDateDDMMYY(cellDate);
+            $("[data-err=date]").textContent = "";
+            calPopover.hidden = true;
+            fillSlots();
+            updateQuickChips();
+          });
+        }
+
+        calDays.appendChild(btn);
+      }
+    }
+
+    function updateQuickChips() {
+      if (!dateQuickWrap) return;
+      dateQuickWrap.innerHTML = "";
+      const program = getSelectedProgram();
+      if (program === "Striking") {
+        form.classList.add("is-striking-mode");
+      } else {
+        form.classList.remove("is-striking-mode");
+      }
+
       const today = new Date();
-      dateNative.min = today.toISOString().split("T")[0];
+      today.setHours(0, 0, 0, 0);
 
-      dateNative.addEventListener("change", () => {
-        if (!dateNative.value) return;
-        const [y, m, d] = dateNative.value.split("-");
-        dateInput.value = `${d}/${m}/${y.slice(-2)}`;
-        $("[data-err=date]").textContent = "";
-        fillSlots();
+      const suggestions = [];
+      const d = new Date(today);
+      for (let i = 0; i < 14 && suggestions.length < 3; i++) {
+        if (isDateAvailableForProgram(d, program)) {
+          suggestions.push(new Date(d));
+        }
+        d.setDate(d.getDate() + 1);
+      }
+
+      if (suggestions.length === 0) return;
+
+      const label = document.createElement("span");
+      label.className = "date-quick-label";
+      label.textContent = "Gợi ý ngày gần nhất:";
+      dateQuickWrap.appendChild(label);
+
+      const dayNames = ["CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+      suggestions.forEach(dt => {
+        const val = formatDateDDMMYY(dt);
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "date-chip" + (dateInput.value === val ? " is-active" : "");
+        const dStr = String(dt.getDate()).padStart(2, "0");
+        const mStr = String(dt.getMonth() + 1).padStart(2, "0");
+        chip.textContent = `${dayNames[dt.getDay()]} · ${dStr}/${mStr}`;
+
+        chip.addEventListener("click", () => {
+          dateInput.value = val;
+          $("[data-err=date]").textContent = "";
+          fillSlots();
+          updateQuickChips();
+          if (calPopover) calPopover.hidden = true;
+        });
+
+        dateQuickWrap.appendChild(chip);
       });
     }
 
-    if (dateBtn && dateNative) {
-      dateBtn.addEventListener("click", () => {
-        try {
-          if (typeof dateNative.showPicker === "function") dateNative.showPicker();
-          else dateNative.focus();
-        } catch (e) {
-          dateNative.focus();
+    if (dateBtn && calPopover) {
+      dateBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        calPopover.hidden = !calPopover.hidden;
+        if (!calPopover.hidden) {
+          const activeDate = parseDateDDMMYY(dateInput.value) || new Date();
+          calDate = new Date(activeDate.getFullYear(), activeDate.getMonth(), 1);
+          renderCalendar();
         }
       });
     }
 
-    if (dateInput) {
+    if (dateInput && calPopover) {
+      dateInput.addEventListener("click", () => {
+        if (calPopover.hidden) {
+          const activeDate = parseDateDDMMYY(dateInput.value) || new Date();
+          calDate = new Date(activeDate.getFullYear(), activeDate.getMonth(), 1);
+          calPopover.hidden = false;
+          renderCalendar();
+        }
+      });
+
       dateInput.addEventListener("input", () => {
         let v = dateInput.value.replace(/\D/g, "").slice(0, 6);
         if (v.length >= 4) {
@@ -721,9 +910,48 @@
           v = v.slice(0, 2) + "/" + v.slice(2);
         }
         dateInput.value = v;
+
+        if (v.length === 8) {
+          const err = rules.date(v);
+          $("[data-err=date]").textContent = err;
+        } else {
+          $("[data-err=date]").textContent = "";
+        }
         fillSlots();
+        updateQuickChips();
+        if (!calPopover.hidden) renderCalendar();
       });
     }
+
+    if (calPrev) {
+      calPrev.addEventListener("click", e => {
+        e.stopPropagation();
+        calDate.setMonth(calDate.getMonth() - 1);
+        renderCalendar();
+      });
+    }
+
+    if (calNext) {
+      calNext.addEventListener("click", e => {
+        e.stopPropagation();
+        calDate.setMonth(calDate.getMonth() + 1);
+        renderCalendar();
+      });
+    }
+
+    document.addEventListener("click", e => {
+      if (!calPopover || calPopover.hidden) return;
+      const wrap = $("#date-wrap");
+      if (wrap && !wrap.contains(e.target)) {
+        calPopover.hidden = true;
+      }
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && calPopover && !calPopover.hidden) {
+        calPopover.hidden = true;
+      }
+    });
 
     function fillSlots() {
       const kind = form.program.value === "BJJ" ? "b" : "s";
@@ -732,6 +960,8 @@
       const seen = new Set();
 
       let targetDayIdx = -1;
+      let isSunday = false;
+      let isValidDay = false;
       const dateVal = (dateInput && dateInput.value || "").trim();
       const m = /^(\d{2})\/(\d{2})\/(\d{2})$/.exec(dateVal);
       if (m) {
@@ -741,15 +971,21 @@
           const day = dt.getDay(); // 0 = CN, 1 = T2, 2 = T3, 3 = T4, 4 = T5, 5 = T6, 6 = T7
           if (day >= 1 && day <= 6) {
             targetDayIdx = day - 1;
+            isValidDay = true;
           } else if (day === 0) {
-            const o = document.createElement("option");
-            o.value = "";
-            o.textContent = "Chủ Nhật: Phòng tập nghỉ (OFF)";
-            o.disabled = true;
-            slotSel.appendChild(o);
-            return;
+            isSunday = true;
           }
         }
+      }
+
+      if (isSunday) {
+        slotSel.innerHTML = '<option value="" disabled selected>Chủ Nhật: Phòng tập nghỉ (OFF)</option>';
+        return;
+      }
+
+      if (kind === "s" && isValidDay && targetDayIdx !== 1 && targetDayIdx !== 3 && targetDayIdx !== 5) {
+        slotSel.innerHTML = '<option value="" disabled selected>Ngày này không có lớp Striking (Chỉ mở T3, T5, T7)</option>';
+        return;
       }
 
       CONFIG.timetable.forEach(r => r.cells.forEach((c, di) => {
@@ -765,23 +1001,62 @@
         slotSel.appendChild(o);
       }));
 
-      if (prevSlot && [...slotSel.options].some(o => o.value === prevSlot)) {
+      // Nếu là Striking và đã có lớp (duy nhất 19:30 - 21:00), tự động chọn luôn
+      if (kind === "s" && slotSel.options.length === 2) {
+        slotSel.selectedIndex = 1;
+        $("[data-err=slot]").textContent = "";
+      } else if (prevSlot && [...slotSel.options].some(o => o.value === prevSlot)) {
         slotSel.value = prevSlot;
       }
     }
-    form.querySelectorAll("input[name=program]").forEach(r => r.addEventListener("change", fillSlots));
-    fillSlots();
+
+    function onProgramChange() {
+      const prog = getSelectedProgram();
+      const curDate = parseDateDDMMYY(dateInput.value);
+      if (!curDate || !isDateAvailableForProgram(curDate, prog)) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const nextDt = new Date(today);
+        for (let i = 0; i < 14; i++) {
+          if (isDateAvailableForProgram(nextDt, prog)) {
+            dateInput.value = formatDateDDMMYY(nextDt);
+            $("[data-err=date]").textContent = "";
+            break;
+          }
+          nextDt.setDate(nextDt.getDate() + 1);
+        }
+      }
+
+      const activeDate = parseDateDDMMYY(dateInput.value) || new Date();
+      calDate = new Date(activeDate.getFullYear(), activeDate.getMonth(), 1);
+
+      fillSlots();
+      updateQuickChips();
+      if (!calPopover.hidden) renderCalendar();
+    }
+
+    form.querySelectorAll("input[name=program]").forEach(r => r.addEventListener("change", onProgramChange));
 
     const rules = {
       date: v => {
         const val = (v || "").trim();
         if (!val) return "Vui lòng chọn hoặc nhập ngày tập.";
         const m = /^(\d{2})\/(\d{2})\/(\d{2})$/.exec(val);
-        if (!m) return "Định dạng ngày phải là DD/MM/YY (VD: 24/10/26).";
-        const day = parseInt(m[1], 10), month = parseInt(m[2], 10), yr = parseInt(m[3], 10);
+        if (!m) return "Định dạng ngày phải là DD/MM/YY (VD: 27/10/26).";
+        const day = parseInt(m[1], 10), month = parseInt(m[2], 10), yr = 2000 + parseInt(m[3], 10);
         if (month < 1 || month > 12) return "Tháng không hợp lệ (01–12).";
-        const daysInMonth = new Date(2000 + yr, month, 0).getDate();
+        const daysInMonth = new Date(yr, month, 0).getDate();
         if (day < 1 || day > daysInMonth) return `Ngày không hợp lệ trong tháng ${month}.`;
+        const dt = new Date(yr, month - 1, day);
+        const todayZero = new Date();
+        todayZero.setHours(0, 0, 0, 0);
+        if (dt < todayZero) return "Vui lòng chọn ngày hôm nay hoặc trong tương lai.";
+        const dow = dt.getDay();
+        if (dow === 0) return "Chủ Nhật phòng tập nghỉ (OFF). Vui lòng chọn ngày khác.";
+        const prog = getSelectedProgram();
+        if (prog === "Striking" && dow !== 2 && dow !== 4 && dow !== 6) {
+          return "Lớp Striking chỉ mở vào Thứ 3, Thứ 5, Thứ 7 (19:30 - 21:00).";
+        }
         return "";
       },
       slot: v => v ? "" : "Chọn một khung giờ.",
@@ -789,7 +1064,17 @@
       phone: v => /^(\+?84|0)\d{9}$/.test(v.replace(/[\s.\-]/g, "")) ? "" : "Số điện thoại chưa đúng (VD: 0901234567).",
       email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "" : "Email chưa đúng."
     };
-    $("#tk-again").onclick = () => { form.reset(); fillSlots(); show(""); ticket.hidden = true; form.hidden = false; form.scrollIntoView({ behavior: "smooth", block: "center" }); };
+
+    onProgramChange();
+
+    $("#tk-again").onclick = () => {
+      form.reset();
+      onProgramChange();
+      show("");
+      ticket.hidden = true;
+      form.hidden = false;
+      form.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
     function show(msg, kind) { const s = $("#status"); s.hidden = !msg; s.className = "status " + kind; s.textContent = msg; }
     form.addEventListener("submit", async e => {
       e.preventDefault(); show("");
