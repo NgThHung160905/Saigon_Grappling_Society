@@ -35,24 +35,32 @@ function onOpen() {
   } catch (e) {}
 }
 
-// Tu dong gom cac dong cung mau: Xanh -> Vang -> Do va in dam tu cot A den F
+// Tu dong gom cac dong cung mau: Xanh -> Vang -> Do va in dam toan bo o tu cot A den F
 function sapXepVaToMau() {
   const sh = getTargetSheet();
+
+  // XOA BO CAC QUY TAC DINH DANG CO DIEU KIEN CU VA MAU XEN KE DANG CHAN MAU NEN CUA O
+  try {
+    sh.clearConditionalFormatRules();
+    const bandings = sh.getBandings();
+    bandings.forEach(b => b.remove());
+  } catch (e) {}
+
   const lastRow = sh.getLastRow();
   if (lastRow < 2) return;
 
   const numRows = lastRow - 1;
-  const numCols = 6; // Chi to mau va xu ly tu cot A den F (6 cot)
+  const numCols = 6; // Chi to mau toan bo o tu cot A den F (6 cot)
   const range = sh.getRange(2, 1, numRows, numCols);
   const data = range.getValues();
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Phan loai vao 3 nhom mau:
+  // Phan loai vao 3 nhom mau (Màu nền ô rõ nét, không bị nhạt quá):
   // 1: Xanh la (Toi ngay / Hom nay)
   // 2: Vang (Sap toi ngay)
-  // 3: Do (Qua ngay)
+  // 3: Do / Hong (Qua ngay)
   const rowsWithMeta = data.map(row => {
     const dStr = row[0];
     const dateObj = parseDate(dStr);
@@ -60,21 +68,21 @@ function sapXepVaToMau() {
 
     const diffDays = Math.round((dateObj.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     let group = 2;
-    let bg = "#FFF2CC"; // Vang (Sap toi)
-    let text = "#7F6000";
+    let bg = "#FFE599"; // Vang ro net (Sap toi ngay)
+    let text = "#5F4500";
 
     if (diffDays === 0) {
-      group = 1; // Xanh la (Tới ngày / Hôm nay)
-      bg = "#D9EAD3";
-      text = "#274E13";
+      group = 1; // Xanh la (Toi ngay / Hom nay)
+      bg = "#B6D7A8";
+      text = "#1B4D2B";
     } else if (diffDays > 0) {
-      group = 2; // Vang (Sắp tới ngày)
-      bg = "#FFF2CC";
-      text = "#7F6000";
+      group = 2; // Vang ro net (Sap toi ngay)
+      bg = "#FFE599";
+      text = "#5F4500";
     } else {
-      group = 3; // Do (Đã qua ngày)
+      group = 3; // Do / Hong (Qua ngay)
       bg = "#F4CCCC";
-      text = "#783F04";
+      text = "#781E1E";
     }
 
     return { row, dateObj, group, diffDays, bg, text };
@@ -91,26 +99,16 @@ function sapXepVaToMau() {
   const sortedData = rowsWithMeta.map(item => item.row);
   range.setValues(sortedData);
 
-  const bgs = [];
-  const texts = [];
-  const weights = [];
-
-  for (let i = 0; i < rowsWithMeta.length; i++) {
-    const item = rowsWithMeta[i];
-    bgs.push(new Array(numCols).fill(item.bg));
-    texts.push(new Array(numCols).fill(item.text));
-    weights.push(new Array(numCols).fill("bold"));
-  }
-
-  // To mau va in dam hang loat tu cot A den F
-  range.setBackgrounds(bgs)
-    .setFontColors(texts)
-    .setFontWeights(weights)
-    .setVerticalAlignment("middle");
-
-  // Dinh dang can giua cac cot can thiet
+  // To mau nen toan bo o va in dam ca dong tu cot A den F
   for (let i = 0; i < rowsWithMeta.length; i++) {
     const r = i + 2;
+    const item = rowsWithMeta[i];
+    sh.getRange(r, 1, 1, numCols)
+      .setBackground(item.bg)
+      .setFontColor(item.text)
+      .setFontWeight("bold")
+      .setVerticalAlignment("middle");
+
     sh.getRange(r, 1).setNumberFormat("dd/MM/yyyy").setHorizontalAlignment("center");
     sh.getRange(r, 3).setHorizontalAlignment("center");
     sh.getRange(r, 5).setNumberFormat("@").setHorizontalAlignment("center");
