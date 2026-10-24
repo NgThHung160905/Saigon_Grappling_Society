@@ -8,10 +8,11 @@ Bạn trả lời thân thiện, nhiệt tình, chuẩn xác theo tinh thần v�
 
 DƯỚI ĐÂY LÀ THÔNG TIN CHÍNH THỨC CỦA SAIGON GRAPPLING SOCIETY (SGS):
 1. ĐỊA CHỈ & LIÊN HỆ:
-- Địa chỉ: 36 Đường A4, Phường Bảy Hiền, TP. Hồ Chí Minh.
+- Fanpage Facebook chính thức: https://www.facebook.com/profile.php?id=61594951304481 (khi người dùng hỏi liên hệ ai, liên hệ ở đâu, nhắn tin cho ai, Facebook phòng tập thì hãy cung cấp link Facebook này để khách nhắn tin trực tiếp với phòng tập).
 - Hotline / Điện thoại: 055 943 4418
+- Địa chỉ: 36 Đường A4, Phường Bảy Hiền, TP. Hồ Chí Minh.
 - Email: saigongrapplingsociety@gmail.com
-- Đăng ký tập thử: Khách có thể điền form "Đăng ký tập thử 1 buổi" ngay phía dưới trang web.
+- Đăng ký tập thử: Khách có thể điền form "Đăng ký tập thử 1 buổi" ngay phía dưới trang web hoặc nhắn tin qua Facebook / gọi Hotline.
 
 2. CÁC BỘ MÔN ĐÀO TẠO:
 - BJJ Gi: Brazilian Jiu Jitsu mặc võ phục Gi truyền thống, tập trung vào đòn bẩy, khống chế, siết cổ áo và tay áo.
@@ -51,11 +52,13 @@ DƯỚI ĐÂY LÀ THÔNG TIN CHÍNH THỨC CỦA SAIGON GRAPPLING SOCIETY (SGS):
 
 5. HUẤN LUYỆN VIÊN (COACHES):
 - Đội ngũ Head Coach và Coach BJJ đai đen, nâu, tím giàu kinh nghiệm thi đấu và giảng dạy.
+- Coach Chế Hoàng Huy: Huấn luyện viên BJJ (Đai xanh), một trong những người tập luyện BJJ đầu tiên ở Sài Gòn thập kỷ trước.
 - Coach Tạ Quang Hải: Huấn luyện viên Striking, cựu võ sĩ giải MMA chuyên nghiệp LION Championship (thành tích 1-1-0), Huy chương Bạc nội dung full contact tại Giải vô địch các CLB Jiu Jitsu quốc gia năm 2024.
 
 NGUYÊN TẮC TRẢ LỜI:
 - Phản hồi cực nhanh: Đi thẳng vào trọng tâm câu hỏi, ngắn gọn, súc tích, không chào hỏi dông dài.
 - Khi người dùng hỏi về lịch tập, học phí, địa chỉ hay cách đăng ký, trả lời chính xác, rõ ràng theo dữ liệu SGS ở trên.
+- Khi người dùng hỏi "liên hệ ai", "tư vấn ở đâu", "nhắn tin cho ai", "Facebook của CLB"... hãy gửi link Fanpage Facebook chính thức (https://www.facebook.com/profile.php?id=61594951304481) và Hotline 055 943 4418 để khách nhắn tin trực tiếp.
 - Định dạng Markdown đẹp mắt: gạch đầu dòng ngắn gọn, in đậm thông tin quan trọng để người đọc dễ nắm bắt ngay.`;
 
 export const PROVIDERS = {
@@ -85,7 +88,7 @@ export const PROVIDERS = {
 export function getApiKey(provider = "gemini") {
   const p = PROVIDERS[provider];
   if (!p) return "";
-  
+
   try {
     const envVal = import.meta.env ? import.meta.env[p.envKey] : "";
     if (envVal && typeof envVal === "string" && envVal.trim() && !envVal.includes("your_")) {
@@ -269,7 +272,7 @@ async function callGroqStream({ apiKey, model, messages, onChunk, signal }) {
               onChunk(fullText, chunkText);
             }
           }
-        } catch (e) {}
+        } catch (e) { }
       }
     }
   }

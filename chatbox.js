@@ -35,6 +35,10 @@ function formatMarkdown(text) {
   // Italic: *text*
   html = html.replace(/\*([^*]+)\*/g, "<em>$1</em>");
 
+  // Links: [text](url) and raw URLs
+  html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:var(--chat-primary);text-decoration:underline;font-weight:600">$1</a>');
+  html = html.replace(/(^|[\s(])(https?:\/\/[^\s)<]+)/g, '$1<a href="$2" target="_blank" rel="noopener noreferrer" style="color:var(--chat-primary);text-decoration:underline;font-weight:600">$2</a>');
+
   // Bullet points
   const lines = html.split("\n");
   let inList = false;

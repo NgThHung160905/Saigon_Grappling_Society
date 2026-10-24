@@ -526,6 +526,18 @@
         { name: "Tên huấn luyện viên", title: "Coach", disc: "BJJ", belt: "purple", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
         { name: "Tên huấn luyện viên", title: "Head Coach", disc: "Striking", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
         {
+          name: "Chế Hoàng Huy",
+          title: "Coach",
+          disc: "BJJ",
+          belt: "blue",
+          img: "images/Chế Hoàng Huy.jpg",
+          link: "https://www.facebook.com/photo?fbid=122113327659498376&set=a.122108037897498376",
+          achLabel: "Ghi chú",
+          ach: [
+            "Một trong những người tập luyện BJJ đầu tiên ở Sài Gòn thập kỷ trước"
+          ]
+        },
+        {
           name: "Tạ Quang Hải", title: "Coach", disc: "Striking", img: "images/Tạ Quang Hải.jpg", link: "https://www.facebook.com/photo?fbid=122113529673498376&set=a.122108037897498376", ach: [
             "Cựu võ sĩ LION Championship (MMA 1-1-0)",
             "Huy chương bạc 🥈 nội dung full contact tại giải vô địch các câu lạc bộ jiujitsu quốc gia năm 2024"
@@ -602,9 +614,10 @@
       el.setAttribute("aria-label", `${c.name}, ${c.title} ${c.disc}. Xem thành tích`);
       const belt = c.belt ? `<div class="belt"><i style="--bc:${BELT[c.belt]}"></i>${BELT_VN[c.belt]}</div>` : "";
       const imgSrc = c.img || `images/coach-${i + 1}.jpg`;
+      const achLabel = c.achLabel || "Thành tích";
       el.innerHTML = `<img class="mk" src="images/mono-white.png" alt=""><img class="ph" src="${encodeURI(imgSrc)}" onerror="this.src='${imgSrc}'; this.onerror=function(){this.remove();}" alt="${esc(c.name)}" onerror="this.remove()"><span class="hint">+</span>
     <div class="info"><span class="chip-role">${esc(c.title)} · ${esc(c.disc)}</span><h3>${esc(c.name)}</h3>${belt}</div>
-    <div class="ach"><span class="k">${esc(c.title)} · ${esc(c.disc)}</span><div class="nm">${esc(c.name)}</div><span class="k">Thành tích</span><ul>${c.ach.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>`;
+    <div class="ach"><span class="k">${esc(c.title)} · ${esc(c.disc)}</span><div class="nm">${esc(c.name)}</div><span class="k">${esc(achLabel)}</span><ul>${c.ach.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>`;
       if (!c.link) {
         const toggle = () => { const o = el.classList.toggle("open"); el.setAttribute("aria-expanded", o); };
         el.addEventListener("click", toggle);
