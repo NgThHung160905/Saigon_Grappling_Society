@@ -2,17 +2,20 @@ const SHEET_NAME = "Đăng ký tập thử";
 const HEADERS = ["Ngày tháng năm", "Họ và Tên", "Bộ môn", "Khung giờ tập", "Số điện thoại", "Email"];
 const NOTIFICATION_EMAIL = "saigongrapplingsociety@gmail.com";
 
-// Chuyen chuoi ngay thanh Date
+// Chuyen chuoi ngay thanh Date an toan
 function parseDate(dStr) {
   if (!dStr) return new Date();
-  if (dStr instanceof Date) return dStr;
+  if (Object.prototype.toString.call(dStr) === "[object Date]" && !isNaN(dStr.getTime())) {
+    return new Date(dStr.getTime());
+  }
   const parts = String(dStr).trim().split(/[\/\-]/);
   if (parts.length === 3) {
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
     let year = parseInt(parts[2], 10);
     if (year < 100) year += 2000;
-    return new Date(year, month, day);
+    const dt = new Date(year, month, day);
+    if (!isNaN(dt.getTime())) return dt;
   }
   return new Date();
 }
@@ -22,16 +25,24 @@ function getTargetSheet() {
   return ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
 }
 
-// Tu dong gom cac dong cung mau: Xanh -> Vang -> Do va in dam toan bo
+// Menu tien ich xuat hien ngay tren thanh cong cu Google Sheet khi mo file
+function onOpen() {
+  try {
+    const ui = SpreadsheetApp.getUi();
+    ui.createMenu("🥋 SGS")
+      .addItem("Tô màu & Sắp xếp ngay", "sapXepVaToMau")
+      .addToUi();
+  } catch (e) {}
+}
+
+// Tu dong gom cac dong cung mau: Xanh -> Vang -> Do va in dam tu cot A den F
 function sapXepVaToMau() {
   const sh = getTargetSheet();
-  sh.clearConditionalFormatRules();
-
   const lastRow = sh.getLastRow();
   if (lastRow < 2) return;
 
   const numRows = lastRow - 1;
-  const numCols = Math.max(sh.getLastColumn(), 6);
+  const numCols = 6; // Chi to mau va xu ly tu cot A den F (6 cot)
   const range = sh.getRange(2, 1, numRows, numCols);
   const data = range.getValues();
 
@@ -39,9 +50,9 @@ function sapXepVaToMau() {
   today.setHours(0, 0, 0, 0);
 
   // Phan loai vao 3 nhom mau:
-  // 1: Xanh la (Hom nay)
-  // 2: Vang (Sap toi)
-  // 3: Do (Da qua)
+  // 1: Xanh la (Toi ngay / Hom nay)
+  // 2: Vang (Sap toi ngay)
+  // 3: Do (Qua ngay)
   const rowsWithMeta = data.map(row => {
     const dStr = row[0];
     const dateObj = parseDate(dStr);
@@ -49,21 +60,21 @@ function sapXepVaToMau() {
 
     const diffDays = Math.round((dateObj.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     let group = 2;
-    let bg = "#FFF3CD"; // Vang
-    let text = "#856404";
+    let bg = "#FFF2CC"; // Vang (Sap toi)
+    let text = "#7F6000";
 
     if (diffDays === 0) {
-      group = 1; // Xanh la (Hom nay)
-      bg = "#D4EDDA";
-      text = "#155724";
+      group = 1; // Xanh la (Tới ngày / Hôm nay)
+      bg = "#D9EAD3";
+      text = "#274E13";
     } else if (diffDays > 0) {
-      group = 2; // Vang (Sap toi)
-      bg = "#FFF3CD";
-      text = "#856404";
+      group = 2; // Vang (Sắp tới ngày)
+      bg = "#FFF2CC";
+      text = "#7F6000";
     } else {
-      group = 3; // Do (Da qua)
-      bg = "#F8D7DA";
-      text = "#721C24";
+      group = 3; // Do (Đã qua ngày)
+      bg = "#F4CCCC";
+      text = "#783F04";
     }
 
     return { row, dateObj, group, diffDays, bg, text };
@@ -80,20 +91,30 @@ function sapXepVaToMau() {
   const sortedData = rowsWithMeta.map(item => item.row);
   range.setValues(sortedData);
 
-  // To mau va in dam toan bo ca dong tu cot 1 den 6
+  const bgs = [];
+  const texts = [];
+  const weights = [];
+
+  for (let i = 0; i < rowsWithMeta.length; i++) {
+    const item = rowsWithMeta[i];
+    bgs.push(new Array(numCols).fill(item.bg));
+    texts.push(new Array(numCols).fill(item.text));
+    weights.push(new Array(numCols).fill("bold"));
+  }
+
+  // To mau va in dam hang loat tu cot A den F
+  range.setBackgrounds(bgs)
+    .setFontColors(texts)
+    .setFontWeights(weights)
+    .setVerticalAlignment("middle");
+
+  // Dinh dang can giua cac cot can thiet
   for (let i = 0; i < rowsWithMeta.length; i++) {
     const r = i + 2;
-    const item = rowsWithMeta[i];
-    sh.getRange(r, 1, 1, numCols)
-      .setBackground(item.bg)
-      .setFontColor(item.text)
-      .setFontWeight("bold")
-      .setVerticalAlignment("middle");
-
     sh.getRange(r, 1).setNumberFormat("dd/MM/yyyy").setHorizontalAlignment("center");
     sh.getRange(r, 3).setHorizontalAlignment("center");
     sh.getRange(r, 5).setNumberFormat("@").setHorizontalAlignment("center");
-    sh.setRowHeight(r, 32);
+    sh.setRowHeight(r, 34);
   }
 
   for (let i = 1; i <= HEADERS.length; i++) sh.autoResizeColumn(i);
@@ -107,13 +128,9 @@ function onEdit(e) {
   sapXepVaToMau();
 }
 
-function onOpen() {
-  sapXepVaToMau();
-}
-
 function doGet(e) {
   sapXepVaToMau();
-  return ContentService.createTextOutput("Da sap xep va to mau thanh cong!").setMimeType(ContentService.MimeType.TEXT);
+  return ContentService.createTextOutput("Da to mau va sap xep thanh cong!").setMimeType(ContentService.MimeType.TEXT);
 }
 
 function doPost(e) {
