@@ -50,6 +50,7 @@
       [".pillar", "rv"],
       [".who-top .age", "rv"],
       [".role", "rv rv-scale"],
+      [".who-cta", "rv"],
       [".quote", "rv rv-scale"],
       [".arrows", "rv"],
       [".coach", "rv"],

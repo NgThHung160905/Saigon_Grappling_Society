@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
 
 <head>
@@ -23,15 +23,8 @@
 
   <header class="top">
     <div class="wrap">
-      <a class="logo top-collab" href="#top" aria-label="Saigon Grappling Society × 10th Planet">
+      <a class="logo" href="#top" aria-label="Saigon Grappling Society">
         <img src="images/logo-blue.png" alt="Saigon Grappling Society" class="top-logo-sgs">
-        <span class="top-collab-sep" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </span>
-        <img src="images/10th-planet.png" alt="10th Planet Jiu Jitsu" class="top-logo-partner">
       </a>
       <nav class="top-nav">
         <a class="l" href="#thong-tin">Thông tin lớp học</a>
@@ -44,10 +37,14 @@
   <main id="top">
 
     <div class="hero" role="img" aria-label="Saigon Grappling Society">
-      <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
-        <source src="images/dragon_1080p_loop.mp4" type="video/mp4">
-        <source src="images/dragon_4k_loop.mp4" type="video/mp4">
-      </video>
+      <!-- Phông nền Hero: Tràn viền sắc nét trên Desktop, không gian ánh sáng cinema trên Mobile -->
+      <div class="hero-backdrop" aria-hidden="true">
+        <img class="hero-bg-img" src="images/main-.jpg" alt="" fetchpriority="high" decoding="async">
+        <div class="hero-backdrop-overlay"></div>
+      </div>
+
+      <div class="hero-fx" aria-hidden="true"><canvas></canvas></div>
+
       <div class="wrap">
         <div class="hero-crest">
           <img class="hero-logo" src="images/logo-white.png" alt="Saigon Grappling Society">
@@ -57,6 +54,14 @@
           <span>Rèn thể lực</span>
           <span>Luyện <em>trí lực</em></span>
         </h1>
+
+        <!-- Trên điện thoại: Khung hiển thị trọn vẹn 100% các thành viên không bị cắt viền và không bị chữ che -->
+        <div class="hero-mobile-media">
+          <div class="hero-mobile-card">
+            <img src="images/main-.jpg" alt="Đội ngũ Saigon Grappling Society" decoding="async">
+          </div>
+        </div>
+
         <p class="sub">Môn võ kết hợp sức mạnh, kỹ thuật và khả năng tư duy giải quyết vấn đề.</p>
         <div class="hero-cta">
           <a class="btn lime" href="#dang-ky">Đăng ký ngay</a>
@@ -78,15 +83,9 @@
           </div>
         </div>
         <div class="frames">
-          <div class="slot"><img class="mk" src="images/mono-white.png" alt=""><span
-              class="file">images/bjj-1.jpg</span><img class="ph" src="images/bjj-1.jpg" alt="Khống chế"
-              onerror="this.remove()"><span class="tag">Khống chế</span></div>
-          <div class="slot"><img class="mk" src="images/mono-white.png" alt=""><span
-              class="file">images/bjj-2.jpg</span><img class="ph" src="images/bjj-2.jpg" alt="Vật"
-              onerror="this.remove()"><span class="tag">Vật</span></div>
-          <div class="slot"><img class="mk" src="images/mono-white.png" alt=""><span
-              class="file">images/bjj-3.jpg</span><img class="ph" src="images/bjj-3.jpg" alt="Khóa siết"
-              onerror="this.remove()"><span class="tag">Khóa siết</span></div>
+          <div class="slot"><img class="ph" src="images/What's Jiu Jitsu/Khống Chế.jpg" alt="Khống chế" loading="lazy" decoding="async"><span class="tag">Khống chế</span></div>
+          <div class="slot"><img class="ph" src="images/What's Jiu Jitsu/Vật.jpeg" alt="Vật" loading="lazy" decoding="async" style="object-position: 46% center"><span class="tag">Vật</span></div>
+          <div class="slot"><img class="ph" src="images/What's Jiu Jitsu/Khóa Siết.jpg" alt="Khóa siết" loading="lazy" decoding="async" style="object-position: 62% center"><span class="tag">Khóa siết</span></div>
         </div>
         <div class="pillars">
           <div class="pillar">
@@ -125,6 +124,12 @@
           </div>
         </div>
         <div class="roles" id="roles"></div>
+        <div class="who-cta">
+          <a class="btn" href="#dang-ky">
+            <span>Trải nghiệm miễn phí</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -148,27 +153,12 @@
           <h2 class="t t-lg">SGS Members</h2>
         </div>
         <div class="bento">
-          <div class="slot big"><img class="mk" src="images/mono-white.png" alt=""><span
-              class="file">images/crew-1.jpg</span><img class="ph" src="images/crew-1.jpg" alt=""
-              onerror="this.remove()"></div>
-          <div class="slot "><img class="mk" src="images/star-white.png" alt=""><span
-              class="file">images/crew-2.jpg</span><img class="ph" src="images/crew-2.jpg" alt=""
-              onerror="this.remove()"></div>
-          <div class="slot "><img class="mk" src="images/star-white.png" alt=""><span
-              class="file">images/crew-3.jpg</span><img class="ph" src="images/crew-3.jpg" alt=""
-              onerror="this.remove()"></div>
-          <div class="slot w"><img class="mk" src="images/star-white.png" alt=""><span
-              class="file">images/mat-1.jpg</span><img class="ph" src="images/mat-1.jpg" alt="" onerror="this.remove()">
-          </div>
-          <div class="slot "><img class="mk" src="images/star-white.png" alt=""><span
-              class="file">images/crew-4.jpg</span><img class="ph" src="images/crew-4.jpg" alt=""
-              onerror="this.remove()"></div>
-          <div class="slot "><img class="mk" src="images/star-white.png" alt=""><span
-              class="file">images/crew-5.jpg</span><img class="ph" src="images/crew-5.jpg" alt=""
-              onerror="this.remove()"></div>
-          <div class="slot w"><img class="mk" src="images/star-white.png" alt=""><span
-              class="file">images/mat-2.jpg</span><img class="ph" src="images/mat-2.jpg" alt="" onerror="this.remove()">
-          </div>
+          <div class="slot portrait"><img class="ph" src="images/SGS MEMBERS/1.png" alt="Không gian phòng tập SGS" loading="lazy" decoding="async"></div>
+          <div class="slot landscape"><img class="ph" src="images/SGS MEMBERS/2.png" alt="Thảm tập Saigon Grappling Society" loading="lazy" decoding="async"></div>
+          <div class="slot portrait"><img class="ph" src="images/SGS MEMBERS/3.png" alt="Biểu tượng SGS trên thảm tập" loading="lazy" decoding="async"></div>
+          <div class="slot landscape"><img class="ph" src="images/SGS MEMBERS/4.jpg" alt="Học viên SGS khởi động trên thảm" loading="lazy" decoding="async"></div>
+          <div class="slot portrait"><img class="ph" src="images/SGS MEMBERS/5.jpg" alt="Luyện tập No-Gi Grappling tại SGS" loading="lazy" decoding="async"></div>
+          <div class="slot landscape"><img class="ph" src="images/SGS MEMBERS/6.jpg" alt="Luyện tập BJJ Gi Sparring tại SGS" loading="lazy" decoding="async"></div>
         </div>
       </div>
     </section>
@@ -436,7 +426,7 @@
       <div class="foot-brand">
         <div class="foot-collab">
           <div class="foot-collab-slot">
-            <img src="images/logo-white.png" alt="Saigon Grappling Society" class="foot-logo sgs-logo">
+            <img src="images/SOI.png" alt="Sói Jiu Jitsu" class="foot-logo foot-logo-partner">
           </div>
           <span class="foot-collab-sep" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -445,10 +435,10 @@
             </svg>
           </span>
           <div class="foot-collab-slot">
-            <img src="images/10th-planet.png" alt="10th Planet Jiu Jitsu" class="foot-logo foot-logo-partner">
+            <img src="images/logo-white.png" alt="Saigon Grappling Society" class="foot-logo sgs-logo">
           </div>
         </div>
-        <div class="foot-collab-label">OFFICIAL AFFILIATE</div>
+        <div class="foot-collab-label">LINEAGE</div>
       </div>
       <div class="foot-grid">
         <div class="foot-col foot-contact">
@@ -497,7 +487,7 @@
                   d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z" />
               </svg>
             </a>
-            <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram"
+            <a href="https://www.instagram.com/saigongrapplingsociety/" target="_blank" rel="noopener" aria-label="Instagram"
               class="social-link social-ig">
               <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
                 <path
@@ -542,16 +532,12 @@
       // Coaches: DỮ LIỆU MẪU, thay tên, chức danh, đai và thành tích thật. Thêm bao nhiêu coach cũng được.
       // Ảnh: images/coach-1.jpg, coach-2.jpg... (đúng thứ tự). belt: white | blue | purple | brown | black (bỏ trống nếu không có)
       coaches: [
-        { name: "Tên huấn luyện viên", title: "Head Coach", disc: "BJJ", belt: "black", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
-        { name: "Tên huấn luyện viên", title: "Coach", disc: "BJJ", belt: "brown", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
-        { name: "Tên huấn luyện viên", title: "Coach", disc: "BJJ", belt: "purple", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
-        { name: "Tên huấn luyện viên", title: "Head Coach", disc: "Striking", ach: ["Thành tích 1", "Thành tích 2", "Thành tích 3"] },
         {
           name: "Chế Hoàng Huy",
           title: "Coach",
           disc: "BJJ",
           belt: "blue",
-          img: "images/che-hoang-huy.jpg",
+          img: "images/COACHES/Chế Hoàng Huy.jpg",
           link: "https://www.facebook.com/photo?fbid=122113327659498376&set=a.122108037897498376",
           achLabel: "Ghi chú",
           ach: [
@@ -559,10 +545,39 @@
           ]
         },
         {
-          name: "Tạ Quang Hải", title: "Coach", disc: "Striking", img: "images/Tạ Quang Hải.jpg", link: "https://www.facebook.com/photo?fbid=122113529673498376&set=a.122108037897498376", ach: [
+          name: "Tạ Quang Hải",
+          title: "Coach",
+          disc: "Striking",
+          img: "images/COACHES/Tạ Quang Hải.jpg",
+          link: "https://www.facebook.com/photo?fbid=122113529673498376&set=a.122108037897498376",
+          ach: [
             "Cựu võ sĩ LION Championship (MMA 1-1-0)",
             "Huy chương bạc 🥈 nội dung full contact tại giải vô địch các câu lạc bộ jiujitsu quốc gia năm 2024"
           ]
+        },
+        {
+          name: "Nguyễn Thành Luân",
+          title: "Coach",
+          disc: "BJJ",
+          belt: "blue",
+          img: "images/COACHES/Nguyễn Thành Luân.jpg",
+          link: "https://www.facebook.com/photo?fbid=122113950639498376&set=a.122108037897498376"
+        },
+        {
+          name: "Nguyễn Thế Hùng",
+          title: "Coach",
+          disc: "BJJ",
+          belt: "blue",
+          img: "images/COACHES/Nguyễn Thế Hùng.jpg",
+          link: "https://www.facebook.com/photo?fbid=122114861301498376&set=a.122108037897498376"
+        },
+        {
+          name: "Trần Khánh Huân",
+          title: "Coach",
+          disc: "BJJ",
+          belt: "blue",
+          img: "images/COACHES/Trần Khánh Huân.jpg",
+          link: "https://www.facebook.com/photo?fbid=122114368413498376&set=a.122108037897498376"
         }
       ],
 
@@ -572,7 +587,7 @@
       timetable: [
         { period: "Sáng", time: "7:00 - 10:00", cells: [null, null, null, null, null, null] },
         { period: "Sáng", time: "10:00 - 12:00", cells: ["nogi", "gi", "nogi", "gi", "nogi", "nogi"] },
-        { period: "Trưa", time: "12:00 - 14:00", cells: ["gn", "gn", "nogi_sp", "gn", "gn", null] },
+        { period: "Trưa", time: "12:00 - 14:00", cells: ["gn", "gn", "gn", "gn", "gn", null] },
         { period: "Chiều", time: "14:00 - 15:00", cells: [null, null, null, null, null, null] },
         { period: "Chiều", time: "15:00 - 17:00", cells: [null, null, null, null, null, "open"] },
         { period: "Tối", time: "18:00 - 19:15", note: "Fundamental", cells: ["nogi", "nogi", "gi", "nogi", "nogi", "gi"] },
@@ -630,17 +645,25 @@
     const BELT_VN = { white: "Đai trắng", blue: "Đai xanh", purple: "Đai tím", brown: "Đai nâu", black: "Đai đen" };
     const track = $("#track");
     CONFIG.coaches.forEach((c, i) => {
+      const hasAch = Array.isArray(c.ach) && c.ach.length > 0;
       const el = document.createElement(c.link ? "a" : "div");
       if (c.link) { el.href = c.link; el.target = "_blank"; el.rel = "noopener noreferrer"; }
-      el.className = "coach"; el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-expanded", "false");
-      el.setAttribute("aria-label", `${c.name}, ${c.title} ${c.disc}. Xem thành tích`);
+      el.className = "coach" + (hasAch ? "" : " no-ach");
+      el.tabIndex = 0;
+      if (!c.link && hasAch) {
+        el.setAttribute("role", "button");
+        el.setAttribute("aria-expanded", "false");
+      }
+      el.setAttribute("aria-label", hasAch ? `${c.name}, ${c.title} ${c.disc}. Xem thành tích` : `${c.name}, ${c.title} ${c.disc}`);
       const belt = c.belt ? `<div class="belt"><i style="--bc:${BELT[c.belt]}"></i>${BELT_VN[c.belt]}</div>` : "";
       const imgSrc = c.img || `images/coach-${i + 1}.jpg`;
       const achLabel = c.achLabel || "Thành tích";
-      el.innerHTML = `<img class="mk" src="images/mono-white.png" alt=""><img class="ph" src="${encodeURI(imgSrc)}" onerror="this.src='${imgSrc}'; this.onerror=function(){this.remove();}" alt="${esc(c.name)}" onerror="this.remove()"><span class="hint">+</span>
+      const hintHtml = hasAch ? `<span class="hint">+</span>` : "";
+      const achHtml = hasAch ? `<div class="ach"><span class="k">${esc(c.title)} · ${esc(c.disc)}</span><div class="nm">${esc(c.name)}</div><span class="k">${esc(achLabel)}</span><ul>${c.ach.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>` : "";
+      el.innerHTML = `<img class="mk" src="images/mono-white.png" alt=""><img class="ph" src="${encodeURI(imgSrc)}" onerror="this.src='${imgSrc}'; this.onerror=function(){this.remove();}" alt="${esc(c.name)}">${hintHtml}
     <div class="info"><span class="chip-role">${esc(c.title)} · ${esc(c.disc)}</span><h3>${esc(c.name)}</h3>${belt}</div>
-    <div class="ach"><span class="k">${esc(c.title)} · ${esc(c.disc)}</span><div class="nm">${esc(c.name)}</div><span class="k">${esc(achLabel)}</span><ul>${c.ach.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>`;
-      if (!c.link) {
+    ${achHtml}`;
+      if (!c.link && hasAch) {
         const toggle = () => { const o = el.classList.toggle("open"); el.setAttribute("aria-expanded", o); };
         el.addEventListener("click", toggle);
         el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
