@@ -172,6 +172,34 @@ export function initChatbox() {
   const sendBtn = document.getElementById("chat-send-btn");
   const suggestions = document.getElementById("chat-suggestions");
 
+  // Bộ lọc phát hiện ngôn từ tục tĩu / xúc phạm
+  const PROFANITY_PATTERN = /\b(đm|dm|dkm|đkm|vcl|vcc|vl|cl|cc|lồn|lon|buồi|buoi|cặc|cac|địt|dit|đụ|du má|đụ má|mẹ mày|me may|bitch|fuck|fucking|shit|asshole|bastard|dick|đéo|deo|mẹ kiếp|cút|đồ chó|đồ khốn)\b|đ[iị]t|d[iị]t|l[ồo]n|c[ặa]c|bu[ồo]i|ch[óo] má|đ[ụu] m[áa]|đ[ụu] m[ẹe]|v[ãa]i c[ứu]|v[ãa]i l[ồo]n/i;
+
+  let strikeCount = parseInt(sessionStorage.getItem("sgs_chat_strikes") || "0", 10);
+  let isBanned = sessionStorage.getItem("sgs_chat_banned") === "true";
+
+  function applyBan() {
+    isBanned = true;
+    sessionStorage.setItem("sgs_chat_banned", "true");
+    if (textarea) {
+      textarea.disabled = true;
+      textarea.value = "";
+      textarea.placeholder = "Bạn đã bị cấm chat do tiếp tục sử dụng ngôn từ không phù hợp.";
+      textarea.style.opacity = "0.6";
+      textarea.style.cursor = "not-allowed";
+    }
+    if (sendBtn) {
+      sendBtn.disabled = true;
+      sendBtn.style.opacity = "0.4";
+      sendBtn.style.cursor = "not-allowed";
+    }
+    if (suggestions) suggestions.style.display = "none";
+  }
+
+  if (isBanned) {
+    applyBan();
+  }
+
   const CHAT_I18N = {
     vi: {
       launcher: "Mở trò chuyện AI",
@@ -330,6 +358,7 @@ export function initChatbox() {
 
   // Xử lý gửi tin nhắn
   async function handleSubmit(promptText) {
+    if (isBanned) return;
     const text = (promptText || textarea.value).trim();
     if (!text || state.isGenerating) return;
 
@@ -341,7 +370,48 @@ export function initChatbox() {
     appendMessage("user", text);
     state.messages.push({ role: "user", content: text });
 
-    // 2. Khởi tạo streaming gọi AI
+    // 2. Kiểm tra ngôn từ tục tĩu / xúc phạm
+    const isProfane = PROFANITY_PATTERN.test(text);
+    if (isProfane) {
+      if (strikeCount === 0) {
+        // Vi phạm lần 1: Gửi thông điệp giải tỏa cùng các coach
+        strikeCount = 1;
+        sessionStorage.setItem("sgs_chat_strikes", "1");
+        showTypingIndicator();
+        setTimeout(() => {
+          removeTypingIndicator();
+          const warningMsg = "Tôi biết bạn đang rất khó chịu trong người, có thể là do áp lực công việc, học tập hoặc cuộc sống. Vì vậy hãy đến với SGS để được đấm nhau với các coach với mục đích giải tỏa bạn nhé :)))";
+          appendMessage("assistant", warningMsg);
+          state.messages.push({ role: "assistant", content: warningMsg });
+        }, 500);
+        return;
+      } else if (strikeCount === 1) {
+        // Vi phạm lần 2: Đưa ra lời cảnh báo cấm chat
+        strikeCount = 2;
+        sessionStorage.setItem("sgs_chat_strikes", "2");
+        showTypingIndicator();
+        setTimeout(() => {
+          removeTypingIndicator();
+          const warningMsg2 = "Nếu bạn nhắn bậy nữa, tôi sẽ cấm chat bạn á :v";
+          appendMessage("assistant", warningMsg2);
+          state.messages.push({ role: "assistant", content: warningMsg2 });
+        }, 500);
+        return;
+      } else {
+        // Vi phạm lần 3 trở đi: Cấm chat ngay lập tức!
+        showTypingIndicator();
+        setTimeout(() => {
+          removeTypingIndicator();
+          const banMsg = "Bạn đã bị cấm chat do tiếp tục sử dụng ngôn từ không phù hợp.";
+          appendMessage("assistant", banMsg);
+          state.messages.push({ role: "assistant", content: banMsg });
+          applyBan();
+        }, 400);
+        return;
+      }
+    }
+
+    // 3. Khởi tạo streaming gọi AI
     state.isGenerating = true;
     sendBtn.disabled = true;
     showTypingIndicator();
@@ -356,17 +426,27 @@ export function initChatbox() {
         signal: state.abortController.signal,
         onChunk: (fullText) => {
           removeTypingIndicator();
+          let displayText = fullText;
+          if (displayText.includes("[BAN_CHAT]")) {
+            displayText = displayText.replace("[BAN_CHAT]", "").trim();
+            applyBan();
+          }
           if (!assistantBubble) {
-            assistantBubble = appendMessage("assistant", fullText);
+            assistantBubble = appendMessage("assistant", displayText);
           } else {
-            assistantBubble.innerHTML = formatMarkdown(fullText);
+            assistantBubble.innerHTML = formatMarkdown(displayText);
           }
           scrollToBottom();
         }
       });
 
       if (assistantBubble) {
-        state.messages.push({ role: "assistant", content: assistantBubble.innerText });
+        const fullAnswer = assistantBubble.innerText;
+        if (fullAnswer.includes("Tôi biết bạn đang rất khó chịu trong người")) {
+          strikeCount = Math.max(strikeCount, 1);
+          sessionStorage.setItem("sgs_chat_strikes", String(strikeCount));
+        }
+        state.messages.push({ role: "assistant", content: fullAnswer });
       }
     } catch (err) {
       removeTypingIndicator();
@@ -379,8 +459,10 @@ export function initChatbox() {
       }
     } finally {
       state.isGenerating = false;
-      sendBtn.disabled = false;
-      textarea.focus();
+      if (!isBanned) {
+        sendBtn.disabled = false;
+        textarea.focus();
+      }
     }
   }
 
