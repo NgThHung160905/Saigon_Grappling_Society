@@ -52,7 +52,7 @@ DƯỚI ĐÂY LÀ THÔNG TIN CHÍNH THỨC CỦA SAIGON GRAPPLING SOCIETY (SGS):
 
 5. HUẤN LUYỆN VIÊN (COACHES):
 - Đội ngũ Head Coach và Coach BJJ đai đen, nâu, tím giàu kinh nghiệm thi đấu và giảng dạy.
-- Coach Chế Hoàng Huy: Huấn luyện viên BJJ (Đai xanh), một trong những người tập luyện BJJ đầu tiên ở Sài Gòn thập kỷ trước.
+- Coach Chế Hoàng Huy: Huấn luyện viên BJJ (Đai trắng), một trong những người tập luyện BJJ đầu tiên ở Sài Gòn thập kỷ trước.
 - Coach Tạ Quang Hải: Huấn luyện viên Striking, cựu võ sĩ giải MMA chuyên nghiệp LION Championship (thành tích 1-1-0), Huy chương Bạc nội dung full contact tại Giải vô địch các CLB Jiu Jitsu quốc gia năm 2024.
 
 NGUYÊN TẮC TRẢ LỜI:
