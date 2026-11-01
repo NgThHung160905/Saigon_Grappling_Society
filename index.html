@@ -1470,8 +1470,12 @@
       btn.disabled = true;
       btn.textContent = t.rules.submitSending;
 
+      // Chặn hoàn toàn các thông tin test / pentest không gửi lên Google Sheet
+      const testCheck = (data.name + " " + data.email + " " + data.slot + " " + data.phone).toLowerCase();
+      const isTest = testCheck.includes("pentest") || testCheck.includes("example.invalid") || /^0+$/.test(data.phone) || (testCheck.includes("test") && testCheck.includes("sgs"));
+
       try {
-        if (CONFIG.endpoint) {
+        if (CONFIG.endpoint && !isTest) {
           await fetch(CONFIG.endpoint, {
             method: "POST",
             mode: "no-cors",
