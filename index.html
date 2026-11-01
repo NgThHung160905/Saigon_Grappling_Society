@@ -38,6 +38,12 @@
 
 <body>
 
+  <!-- Background Audio: Là Vì Em (Chỉ phát 1 lần, không lặp lại) -->
+  <audio id="bg-audio" preload="auto">
+    <source src="music/là vì em.mp3" type="audio/mpeg">
+  </audio>
+
+
   <header class="top">
     <div class="wrap">
       <a class="logo" href="#top" aria-label="Saigon Grappling Society">
@@ -1491,7 +1497,55 @@
         btn.textContent = t.rules.submitDefault;
       }
     });
+
+    /* ---- Background Audio: Tự động bật nhạc 1 lần khi người dùng tương tác ---- */
+    let hasAudioStarted = false;
+
+    function tryPlayAudio() {
+      if (hasAudioStarted) return;
+      const audio = document.getElementById("bg-audio");
+      if (!audio) return;
+      audio.loop = false; // Chỉ phát 1 lần duy nhất, không lặp lại
+      audio.volume = 0.75; // Âm lượng rõ ràng, êm tai
+      const promise = audio.play();
+      if (promise !== undefined) {
+        promise.then(() => {
+          hasAudioStarted = true;
+          detachAutoPlayEvents();
+          console.log("[SGS Audio] Nhạc nền 'Là Vì Em' đang phát...");
+        }).catch(err => {
+          // Trình duyệt chặn autoplay khi chưa có tương tác người dùng, giữ listener để phát khi bấm
+        });
+      }
+    }
+
+    function onUserGesture() {
+      if (!hasAudioStarted) {
+        tryPlayAudio();
+      }
+    }
+
+    const autoPlayGestures = ["click", "pointerdown", "touchstart", "touchend", "keydown", "scroll"];
+    function attachAutoPlayEvents() {
+      autoPlayGestures.forEach(evt => {
+        document.addEventListener(evt, onUserGesture, { passive: true });
+        window.addEventListener(evt, onUserGesture, { passive: true });
+      });
+    }
+
+    function detachAutoPlayEvents() {
+      autoPlayGestures.forEach(evt => {
+        document.removeEventListener(evt, onUserGesture);
+        window.removeEventListener(evt, onUserGesture);
+      });
+    }
+
+    // Thử kích hoạt ngay khi tải trang, đồng thời lắng nghe tương tác đầu tiên của người dùng
+    tryPlayAudio();
+    attachAutoPlayEvents();
+
   </script>
+
   <script type="module" src="cinematic.js"></script>
   <script type="module" src="chatbox.js"></script>
 </body>
