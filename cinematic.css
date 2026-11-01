@@ -1962,31 +1962,49 @@ section {
   opacity: .75;
 }
 
-/* Bố cục Bento 6 tấm zig-zag cân đối (3 dọc 3:4 + 3 ngang 4:3) */
+/* Bố cục Bento 9 tấm zig-zag hài hòa và phong phú */
 .bento .slot:nth-child(1) {
-  grid-column: 1 / span 5
+  grid-column: 1 / span 5;
 }
 
 .bento .slot:nth-child(2) {
-  grid-column: 6 / span 7
+  grid-column: 6 / span 7;
 }
 
 .bento .slot:nth-child(3) {
   grid-column: 8 / span 5;
-  grid-row: 2
+  grid-row: 2;
 }
 
 .bento .slot:nth-child(4) {
   grid-column: 1 / span 7;
-  grid-row: 2
+  grid-row: 2;
 }
 
 .bento .slot:nth-child(5) {
-  grid-column: 1 / span 5
+  grid-column: 1 / span 5;
+  grid-row: 3;
 }
 
 .bento .slot:nth-child(6) {
-  grid-column: 6 / span 7
+  grid-column: 6 / span 7;
+  grid-row: 3;
+}
+
+.bento .slot:nth-child(7) {
+  grid-column: 1 / span 6;
+  grid-row: 4;
+}
+
+.bento .slot:nth-child(8) {
+  grid-column: 7 / span 6;
+  grid-row: 4;
+}
+
+.bento .slot:nth-child(9) {
+  grid-column: 1 / span 12;
+  grid-row: 5;
+  height: clamp(240px, 40vw, 480px);
 }
 
 @media(max-width:640px) {
