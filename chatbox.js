@@ -172,6 +172,89 @@ export function initChatbox() {
   const sendBtn = document.getElementById("chat-send-btn");
   const suggestions = document.getElementById("chat-suggestions");
 
+  const CHAT_I18N = {
+    vi: {
+      launcher: "Mở trò chuyện AI",
+      title: "Trợ lý AI",
+      online: "● Trực tuyến",
+      close: "Đóng",
+      welcome: "Oss! Chào bạn! Tôi là trợ lý AI của <strong>Saigon Grappling Society</strong>. Tôi có thể giải đáp cho bạn về lịch tập, học phí, các bộ môn BJJ / Striking và đăng ký tập thử.",
+      quickPrompt: "Bạn có thể bấm hỏi nhanh:",
+      chips: [
+        "🗓️ Lịch tập các lớp trong tuần của SGS thế nào?",
+        "💰 Bảng giá học phí và các gói tập tại SGS",
+        "🥋 Tôi chưa từng tập võ, đăng ký tập thử thế nào?"
+      ],
+      placeholder: "Nhập câu hỏi của bạn...",
+      send: "Gửi tin nhắn"
+    },
+    en: {
+      launcher: "Open AI Chat",
+      title: "AI Assistant",
+      online: "● Online",
+      close: "Close",
+      welcome: "Oss! Hello! I am the AI assistant of <strong>Saigon Grappling Society</strong>. I can assist you with our training schedule, membership pricing, BJJ / Striking programs, and trial registration.",
+      quickPrompt: "Quick questions:",
+      chips: [
+        "🗓️ What is SGS's weekly training schedule?",
+        "💰 Membership plans & pricing at SGS",
+        "🥋 I'm a beginner, how do I register for a trial class?"
+      ],
+      placeholder: "Ask a question...",
+      send: "Send message"
+    }
+  };
+
+  function updateChatLanguage(lang) {
+    const t = CHAT_I18N[lang] || CHAT_I18N.vi;
+    if (launcher) launcher.setAttribute("aria-label", t.launcher);
+    const titleEl = document.getElementById("chat-window-title");
+    if (titleEl) titleEl.textContent = t.title;
+    const badgeEl = document.getElementById("chat-provider-badge");
+    if (badgeEl) badgeEl.textContent = t.online;
+    if (closeBtn) closeBtn.title = t.close;
+    if (textarea) textarea.placeholder = t.placeholder;
+    if (sendBtn) sendBtn.setAttribute("aria-label", t.send);
+
+    // If user hasn't started a conversation yet, update initial greeting
+    if (state.messages.length === 0 && msgList) {
+      const firstMsg = msgList.querySelector(".chat-msg.msg-assistant");
+      if (firstMsg) {
+        const bubble = firstMsg.querySelector(".chat-bubble");
+        if (bubble) {
+          bubble.innerHTML = `
+            <p>${t.welcome}</p>
+            <p>${t.quickPrompt}</p>
+            <div class="chat-suggestions" id="chat-suggestions">
+              ${t.chips.map(c => `<button type="button" class="chat-chip">${c}</button>`).join("")}
+            </div>
+          `;
+          const newSug = bubble.querySelector("#chat-suggestions");
+          if (newSug) {
+            newSug.addEventListener("click", e => {
+              const chip = e.target.closest(".chat-chip");
+              if (chip) {
+                const text = chip.textContent.trim().replace(/^[\p{Extended_Pictographic}\uFE0F\u200D\s]+/u, "");
+                handleSubmit(text);
+              }
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Set initial language from storage or html
+  const initialLang = localStorage.getItem("sgs_lang") || document.documentElement.lang || "vi";
+  updateChatLanguage(initialLang);
+
+  // Listen to language switch event from main site
+  window.addEventListener("sgs_language_change", e => {
+    if (e.detail && e.detail.lang) {
+      updateChatLanguage(e.detail.lang);
+    }
+  });
+
   // Mở / đóng Chatbox
   function toggleChat(open) {
     state.isOpen = typeof open === "boolean" ? open : !state.isOpen;
