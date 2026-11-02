@@ -382,7 +382,8 @@ function init() {
   }
   document.querySelectorAll(".reg-tab").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.regTab)));
   document.querySelectorAll("a[data-reg-tab]").forEach((a) => a.addEventListener("click", () => setMode(a.dataset.regTab)));   // nút "Đăng ký học viên" ở bảng giá
-  if (/^#(hoc-vien|dang-ky-hoc-vien)$/.test(location.hash)) setMode("member");
+  if (/^#(member|hoc-vien|dang-ky-hoc-vien)$/.test(location.hash)) setMode("member");
+  window.addEventListener("hashchange", () => { if (/^#(member|hoc-vien|dang-ky-hoc-vien)$/.test(location.hash)) setMode("member", true); });
   setMode(reg.dataset.mode || "trial");
 
   build(); applyStatic();

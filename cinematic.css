@@ -4279,3 +4279,20 @@ footer::before {
   box-shadow: 0 0 16px rgba(24, 119, 242, 0.75);
 }
 
+
+/* Menu có thêm mục "Lịch & Membership": nút không xuống dòng */
+.top-nav .btn { white-space: nowrap; }
+
+/* Điện thoại: menu có 4 mục (kể cả nút Đăng ký) nên xuống hàng thứ 2 của thanh đầu trang */
+@media (max-width: 700px) {
+  .top .wrap, .top.scrolled .wrap { height: auto; min-height: 56px; flex-wrap: wrap; row-gap: 4px; padding-block: 8px; }
+  .top-nav { order: 3; flex: 1 0 100%; justify-content: space-between; gap: 6px; margin-left: 0; }
+  .top-nav a.l { font-size: .6rem; letter-spacing: .03em; padding: 4px 0; }
+  .top-nav .btn { display: inline-flex; padding: 9px 12px; font-size: .6rem; letter-spacing: .05em; }
+}
+@media (max-width: 700px) {
+  .top-nav a.l[href="/#thong-tin"] { display: none; }   /* mục này là 1 đoạn của trang chủ, cuộn xuống là thấy */
+  .top-nav { gap: 8px; }
+  .top-nav a.l { font-size: .58rem; letter-spacing: .02em; }
+  .top-nav .btn { padding: 9px 10px; font-size: .58rem; letter-spacing: .03em; }
+}

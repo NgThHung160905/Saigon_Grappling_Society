@@ -94,3 +94,31 @@
 .reg #hoc-vien .rg-opt .rg-m.perk { color: #3f5c08; }
 .reg #hoc-vien .rg-opt .rg-t { font-size: 1rem; font-weight: 600; }
 .reg #hoc-vien .rg-opt .rg-m { font-size: .86rem; font-weight: 400; }
+
+/* ---- /register: lịch tập ở đầu trang + nút nổi xem lịch ---- */
+#lich.lich-compact { padding-block: clamp(110px, 12vw, 150px) clamp(28px, 4vw, 48px); }
+.peek-btn { position: fixed; left: 16px; bottom: 16px; z-index: 90; display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border: 0; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-family: var(--body); font-weight: 700; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; box-shadow: var(--shadow-up); cursor: pointer; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .25s, transform .25s; }
+.peek-btn.show { opacity: 1; transform: none; pointer-events: auto; }
+.peek { position: fixed; inset: 0; z-index: 200; background: rgba(4, 10, 24, .72); display: grid; place-items: center; padding: 12px; }
+.peek[hidden] { display: none; }
+.peek-panel { width: min(1100px, 100%); max-height: 92vh; display: flex; flex-direction: column; background: var(--bg); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-up); }
+.peek-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: var(--blue); color: #fff; font-family: var(--display); font-size: 1.3rem; text-transform: uppercase; letter-spacing: .03em; }
+.peek-x { border: 0; border-radius: 999px; padding: 8px 16px; background: #fff; color: var(--blue); font-family: var(--body); font-weight: 700; font-size: .78rem; cursor: pointer; }
+.peek-body { overflow: auto; padding: 12px; }
+html.peek-open { overflow: hidden; }
+/* trong cửa sổ nổi: bỏ cột thương hiệu để bảng giờ hiện đủ 6 ngày */
+.peek .tt-poster { grid-template-columns: 1fr; }
+.peek .tt-poster-brand { display: none; }
+
+/* ---- lịch ở đầu /register: mặc định ẩn ---- */
+.lich-toggle { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border: 1.5px solid var(--blue); border-radius: 999px; background: #fff; color: var(--blue); font-family: var(--body); font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background .2s, color .2s; }
+.lich-toggle:hover, .lich-toggle.open { background: var(--blue); color: #fff; }
+.lich-toggle .chev { transition: transform .25s; }
+.lich-toggle.open .chev { transform: rotate(180deg); }
+#lich-body { margin-top: 24px; }
+#lich-body[hidden] { display: none; }
+#lich.lich-compact:not(.lich-open) { padding-bottom: 8px; }
+
+/* bớt khoảng trống giữa nút xem lịch và các tab đăng ký */
+#lich + #dang-ky { padding-top: 56px; }
+#lich + #dang-ky .reg-tabs { margin-top: 0; }
