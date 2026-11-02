@@ -1,0 +1,96 @@
+/* SGS · Đăng ký học viên (section #hoc-vien). Dùng biến màu/font của cinematic.css. */
+#hoc-vien .rg-box { max-width: 760px; margin-inline: auto; }
+#hoc-vien .rg-head { margin-bottom: 28px; }
+#hoc-vien .rg-head p { color: var(--muted); margin: 10px 0 0; max-width: 52ch; }
+#hoc-vien .rg-card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(18px, 4vw, 28px); margin-bottom: 16px; }
+#hoc-vien .rg-card h3 { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; font-family: var(--display); font-size: 1.5rem; line-height: 1.1; color: var(--ink); text-transform: uppercase; letter-spacing: .02em; }
+#hoc-vien .rg-card h3 i { font-style: normal; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color: #fff; font-family: var(--body); font-size: .85rem; font-weight: 700; flex: none; }
+#hoc-vien label.rg-f { display: block; font-weight: 600; font-size: .88rem; color: var(--ink); margin: 14px 0 6px; }
+#hoc-vien label.rg-f:first-of-type { margin-top: 0; }
+#hoc-vien input[type=text], #hoc-vien input[type=tel], #hoc-vien input[type=email] { width: 100%; }
+#hoc-vien .rg-err { color: #b3261e; font-size: .84rem; min-height: 0; margin-top: 4px; }
+#hoc-vien .rg-err:empty { display: none; }
+#hoc-vien input.bad, #hoc-vien select.bad { border-color: #b3261e; }
+#hoc-vien .rg-dob { display: grid; grid-template-columns: 1fr 1.6fr 1.2fr; gap: 8px; }
+#hoc-vien .rg-dob select { width: 100%; }
+#hoc-vien .rg-grp { font-family: var(--display); text-transform: uppercase; letter-spacing: .06em; font-size: 1.05rem; color: var(--muted); margin: 18px 0 8px; }
+#hoc-vien .rg-grp:first-child { margin-top: 0; }
+#hoc-vien .rg-opt { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; margin-bottom: 8px; border: 1.5px solid var(--line); border-radius: 8px; cursor: pointer; background: #fff; transition: border-color .2s, background .2s; }
+#hoc-vien .rg-opt:hover { border-color: var(--blue); }
+#hoc-vien .rg-opt.on { border-color: var(--blue); background: var(--blue-tint); }
+#hoc-vien .rg-opt input { position: absolute; opacity: 0; pointer-events: none; }
+#hoc-vien .rg-opt .rg-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); flex: none; margin-top: 2px; position: relative; background: #fff; }
+#hoc-vien .rg-opt.on .rg-dot { border-color: var(--blue); }
+#hoc-vien .rg-opt.on .rg-dot::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--blue); }
+#hoc-vien .rg-opt input:focus-visible + .rg-dot { outline: 2px solid var(--blue); outline-offset: 2px; }
+#hoc-vien .rg-opt .rg-body { flex: 1; min-width: 0; }
+#hoc-vien .rg-opt .rg-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+#hoc-vien .rg-opt .rg-t { font-weight: 600; color: var(--ink); }
+#hoc-vien .rg-opt .rg-p { font-family: var(--display); font-weight: 700; font-size: 1.25rem; color: var(--blue); white-space: nowrap; }
+#hoc-vien .rg-opt .rg-m { font-size: .86rem; color: var(--muted); margin-top: 2px; }
+#hoc-vien .rg-opt .rg-m.perk { color: #4a6a0a; }
+#hoc-vien .rg-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#hoc-vien .rg-seg button { text-align: left; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; cursor: pointer; font: inherit; color: var(--ink); }
+#hoc-vien .rg-seg button b { display: block; font-size: 1.05rem; }
+#hoc-vien .rg-seg button span { font-size: .82rem; color: var(--muted); }
+#hoc-vien .rg-seg button.on { border-color: var(--blue); background: var(--blue-tint); }
+#hoc-vien .rg-note { font-size: .84rem; color: var(--muted); margin-top: 10px; }
+#hoc-vien .rg-waiver { max-height: 220px; overflow: auto; white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 14px; font-size: .88rem; line-height: 1.55; }
+#hoc-vien .rg-check { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: .92rem; cursor: pointer; }
+#hoc-vien .rg-check input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--blue); flex: none; }
+#hoc-vien .rg-dup { background: #fff4e5; border: 1px solid #f0c27a; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: .92rem; }
+#hoc-vien .rg-dup p { margin: 0 0 4px; }
+#hoc-vien .rg-submit { width: 100%; font-size: 1rem; padding: 18px; }
+#hoc-vien .rg-submit[disabled] { opacity: .6; cursor: progress; }
+#hoc-vien .hidden { display: none !important; }
+#hoc-vien .rg-load { text-align: center; color: var(--muted); padding: 40px 0; }
+#hoc-vien .rg-load button { margin-top: 12px; }
+/* màn hình hoàn tất */
+#hoc-vien .rg-center { text-align: center; }
+#hoc-vien .rg-tick { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-size: 1.7rem; font-weight: 800; margin: 0 auto 12px; }
+#hoc-vien .rg-done-title { font-family: var(--display); font-size: 2rem; text-transform: uppercase; color: var(--ink); }
+#hoc-vien .rg-lbl { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-top: 14px; }
+#hoc-vien .rg-cid { font-family: var(--display); font-size: clamp(2.6rem, 10vw, 3.6rem); font-weight: 800; color: var(--blue); letter-spacing: .04em; line-height: 1.1; }
+#hoc-vien .rg-sum { white-space: pre-line; color: var(--text); margin-top: 6px; }
+#hoc-vien .rg-qr { display: block; width: min(300px, 80%); margin: 10px auto 14px; border-radius: 8px; border: 1px solid var(--line); }
+#hoc-vien .rg-kv { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-top: 8px; }
+#hoc-vien .rg-kv .rg-k { font-size: .76rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+#hoc-vien .rg-kv .rg-v { font-weight: 700; color: var(--ink); word-break: break-word; }
+#hoc-vien .rg-kv button { border: 0; background: var(--blue); color: #fff; border-radius: 6px; padding: 8px 14px; font: inherit; font-weight: 600; cursor: pointer; flex: none; }
+#hoc-vien .rg-steps { margin: 0; padding-left: 20px; color: var(--text); }
+#hoc-vien .rg-steps li { margin-bottom: 6px; }
+@media (max-width: 520px) { #hoc-vien .rg-seg { grid-template-columns: 1fr; } }
+
+/* ---- chuyển giữa "tập thử" và "đăng ký học viên" trong #dang-ky ---- */
+.reg-tabs { display: inline-flex; gap: 4px; padding: 4px; margin-top: clamp(40px, 6vw, 80px); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; background: rgba(4,10,24,.35); backdrop-filter: blur(6px); }
+.reg-tab { border: 0; background: transparent; color: #fff; font-family: var(--body); font-weight: 700; font-size: .82rem; letter-spacing: .06em; text-transform: uppercase; padding: 13px 22px; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s; }
+.reg-tab:hover { background: rgba(255,255,255,.12); }
+.reg-tab.on { background: var(--accent); color: var(--accent-ink); }
+.reg-tabs + .reg-head { padding-top: 28px; }
+.rg-panel { display: none; }
+.reg[data-mode="member"] .rg-panel { display: block; }
+.reg[data-mode="member"] .reg-head, .reg[data-mode="member"] .reg-grid { display: none; }
+.reg .rg-head { padding-top: 28px; }
+.reg .rg-head .t em { font-style: normal; color: var(--accent-soft); }
+.reg .rg-head p { color: var(--on-dark-muted); }
+@media (max-width: 520px) { .reg-tabs { display: flex; } .reg-tab { flex: 1; padding: 13px 10px; font-size: .74rem; } }
+.reg .rg-box { margin-inline: 0; }
+
+/* Trong #dang-ky (nền tối) mọi chữ bên trong thẻ trắng phải dùng màu tối: chặn `.reg .t` (chữ trắng) và màu thừa hưởng từ .reg */
+.reg #hoc-vien .rg-card { color: var(--text); }
+.reg #hoc-vien .rg-card h3, .reg #hoc-vien .rg-opt .rg-t, .reg #hoc-vien .rg-done-title, .reg #hoc-vien label.rg-f, .reg #hoc-vien .rg-kv .rg-v { color: var(--ink); }
+.reg #hoc-vien .rg-opt .rg-p { color: var(--blue); }
+.reg #hoc-vien .rg-opt .rg-m { color: var(--muted); }
+.reg #hoc-vien .rg-opt .rg-m.perk { color: #4a6a0a; }
+.reg #hoc-vien .rg-grp, .reg #hoc-vien .rg-note, .reg #hoc-vien .rg-lbl, .reg #hoc-vien .rg-kv .rg-k { color: var(--muted); }
+.reg #hoc-vien .rg-waiver, .reg #hoc-vien .rg-check, .reg #hoc-vien .rg-sum, .reg #hoc-vien .rg-steps { color: var(--text); }
+.reg #hoc-vien .rg-cid { color: var(--blue); }
+.reg #hoc-vien .rg-err { color: #b3261e; }
+.reg #hoc-vien .rg-seg button { color: var(--ink); }
+.reg #hoc-vien .rg-seg button span { color: var(--muted); }
+.reg #hoc-vien .rg-card a { color: var(--blue); }
+.reg #hoc-vien .rg-head p { color: var(--on-dark-muted); }
+.reg #hoc-vien .rg-seg button span, .reg #hoc-vien .rg-opt .rg-m { color: var(--text); }
+.reg #hoc-vien .rg-opt .rg-m.perk { color: #3f5c08; }
+.reg #hoc-vien .rg-opt .rg-t { font-size: 1rem; font-weight: 600; }
+.reg #hoc-vien .rg-opt .rg-m { font-size: .86rem; font-weight: 400; }

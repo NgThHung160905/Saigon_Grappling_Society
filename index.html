@@ -33,6 +33,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="cinematic.css">
   <link rel="stylesheet" href="chatbox.css">
+  <link rel="stylesheet" href="register.css">
   <script>document.documentElement.classList.add("js")</script>
 </head>
 
@@ -307,6 +308,7 @@
           <div class="cards2" id="packs"></div>
         </div>
         <span class="m-foot" id="m-foot"></span>
+        <p style="margin-top:28px"><a class="btn" href="#dang-ky" data-reg-tab="member" data-i18n="m_cta">Đăng ký học viên</a></p>
       </div>
     </section>
 
@@ -322,9 +324,14 @@
       </video>
       <div class="reg-overlay" aria-hidden="true"></div>
       <div class="wrap">
+        <div class="reg-tabs" role="tablist" aria-label="Loại đăng ký">
+          <button type="button" role="tab" class="reg-tab on" data-reg-tab="trial" aria-selected="true" data-i18n="reg_tab_trial">Tập thử 1 buổi</button>
+          <button type="button" role="tab" class="reg-tab" data-reg-tab="member" aria-selected="false" data-i18n="reg_tab_member">Đăng ký học viên</button>
+        </div>
         <div class="reg-head">
           <h2 class="t t-xl" style="font-size:clamp(3rem,9vw,6.4rem);line-height:1.05" data-i18n="reg_title">Đăng ký<br><em>tập thử 1 buổi</em></h2>
         </div>
+        <div id="hoc-vien" class="rg-panel"><div class="rg-box"></div></div>
         <div class="reg-grid">
           <form id="form" novalidate>
             <div class="field">
@@ -586,6 +593,9 @@
         m_dropin_title: "Đăng ký drop-in",
         m_packs_title: "Đăng ký gói",
         m_packs_note: "*Áp dụng cho gói tập theo khung giờ",
+        m_cta: "Đăng ký học viên",
+        reg_tab_trial: "Tập thử 1 buổi",
+        reg_tab_member: "Đăng ký học viên",
         reg_title: "Đăng ký<br><em>tập thử 1 buổi</em>",
         lbl_program: "Bộ môn",
         lbl_date: 'Chọn ngày <span class="date-format-hint">(DD/MM/YY)</span>',
@@ -712,6 +722,9 @@
         m_dropin_title: "Drop-in Passes",
         m_packs_title: "Term Packages",
         m_packs_note: "*Applicable to fixed-schedule packages",
+        m_cta: "Register as a member",
+        reg_tab_trial: "Free trial class",
+        reg_tab_member: "Become a member",
         reg_title: "Register for a<br><em>Free Trial Class</em>",
         lbl_program: "Discipline",
         lbl_date: 'Select Date <span class="date-format-hint">(DD/MM/YY)</span>',
@@ -1552,6 +1565,7 @@
 
   <script type="module" src="cinematic.js"></script>
   <script type="module" src="chatbox.js"></script>
+  <script type="module" src="register.js"></script>
 </body>
 
 </html>
