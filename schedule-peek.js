@@ -44,6 +44,8 @@ if (poster) {
     const body = overlay.querySelector(".peek-body");
     const copy = poster.cloneNode(true);
     copy.querySelectorAll("[id]").forEach((n) => n.removeAttribute("id"));   // tránh trùng id với lịch gốc
+    // bỏ class hiệu ứng cuộn (opacity 0) của cinematic.js, nếu không lịch trong popup sẽ trong suốt khi lịch gốc chưa từng hiện
+    [copy, ...copy.querySelectorAll(".rv")].forEach((n) => n.classList.remove("rv", "rv-scale", "rv-title", "in-view"));
     body.replaceChildren(copy);
     overlay.hidden = false; document.documentElement.classList.add("peek-open");
     overlay.querySelector(".peek-x").focus();

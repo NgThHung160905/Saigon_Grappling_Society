@@ -13,7 +13,7 @@ DƯỚI ĐÂY LÀ THÔNG TIN CHÍNH THỨC CỦA SAIGON GRAPPLING SOCIETY (SGS):
 - Hotline / Điện thoại: 055 943 4418
 - Địa chỉ: 36 Đường A4, Phường Bảy Hiền, TP. Hồ Chí Minh.
 - Email: saigongrapplingsociety@gmail.com
-- Đăng ký tập thử: Khách có thể điền form "Đăng ký tập thử 1 buổi" ngay phía dưới trang web hoặc nhắn tin qua Facebook / gọi Hotline.
+- Đăng ký tập thử: Khách có thể điền form "Đăng ký tập thử 1 buổi" tại trang Đăng ký (/register) trên website hoặc nhắn tin qua Facebook / gọi Hotline.
 
 2. CÁC BỘ MÔN ĐÀO TẠO:
 - BJJ Gi: Brazilian Jiu Jitsu mặc võ phục Gi truyền thống, tập trung vào đòn bẩy, khống chế, siết cổ áo và tay áo.
@@ -70,7 +70,7 @@ NGUYÊN TẮC TRẢ LỜI:
     - Nếu bằng tiếng Anh: "If you keep swearing, I'm going to ban you from this chat :v"
   + Lần 3 trở đi: Nếu khách hàng vẫn tiếp tục nhắn bậy:
     - Nếu bằng tiếng Việt: "[BAN_CHAT] Bạn đã bị cấm chat do tiếp tục sử dụng ngôn từ không phù hợp."
-    -内部 Nếu bằng tiếng Anh: "[BAN_CHAT] You have been banned from chatting due to continued inappropriate language."`;
+    - Nếu bằng tiếng Anh: "[BAN_CHAT] You have been banned from chatting due to continued inappropriate language."`;
 
 const MODELS = {
   groq: ["qwen/qwen3.8-27b", "openai/gpt-oss-20b", "openai/gpt-oss-120b"],

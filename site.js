@@ -1,6 +1,7 @@
 /* SGS · dùng chung cho mọi trang: i18n VIE/ENG, cấu hình, render lịch/giá/HLV/merch, nhạc nền */
     /* ============ BILINGUAL i18n & CONFIGURATION ============ */
-    let currentLang = localStorage.getItem("sgs_lang") || "vi";
+    let currentLang = "vi";
+    try { const s = localStorage.getItem("sgs_lang"); if (s === "vi" || s === "en") currentLang = s; } catch (e) { /* storage bị chặn */ }
 
     const I18N = {
       vi: {
@@ -462,7 +463,7 @@
     function setLanguage(lang) {
       if (!I18N[lang]) return;
       currentLang = lang;
-      localStorage.setItem("sgs_lang", lang);
+      try { localStorage.setItem("sgs_lang", lang); } catch (e) { /* storage bị chặn */ }
       document.documentElement.lang = lang;
 
       // Update button active state

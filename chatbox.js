@@ -21,6 +21,10 @@ let state = {
 };
 
 // Markdown formatter đơn giản, an toàn
+function savedLang() {
+  try { return localStorage.getItem("sgs_lang"); } catch (e) { return null; } // storage bị chặn
+}
+
 function formatMarkdown(text) {
   if (!text) return "";
   let html = text
@@ -194,7 +198,7 @@ export function initChatbox() {
   function detectSwearLang(text) {
     const isEnProfane = ENGLISH_PROFANITY_PATTERN.test(text);
     const hasVnAccents = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(text);
-    const isEnSite = (localStorage.getItem("sgs_lang") === "en" || document.documentElement.lang === "en");
+    const isEnSite = (savedLang() === "en" || document.documentElement.lang === "en");
     if (isEnProfane && !hasVnAccents) return "en";
     if (isEnSite && !hasVnAccents) return "en";
     return "vi";
@@ -206,7 +210,7 @@ export function initChatbox() {
   function applyBan(lang) {
     isBanned = true;
     sessionStorage.setItem("sgs_chat_banned", "true");
-    const l = lang || (localStorage.getItem("sgs_lang") === "en" ? "en" : "vi");
+    const l = lang || (savedLang() === "en" ? "en" : "vi");
     const t = PROFANITY_RESPONSES[l] || PROFANITY_RESPONSES.vi;
     if (textarea) {
       textarea.disabled = true;
@@ -300,7 +304,7 @@ export function initChatbox() {
   }
 
   // Set initial language from storage or html
-  const initialLang = localStorage.getItem("sgs_lang") || document.documentElement.lang || "vi";
+  const initialLang = savedLang() || document.documentElement.lang || "vi";
   updateChatLanguage(initialLang);
 
   // Listen to language switch event from main site
