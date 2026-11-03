@@ -393,8 +393,8 @@
     const TYPES = {
       gi: { label: "BJJ GI", cls: "gi", kind: "b" },
       nogi: { label: "BJJ NOGI", cls: "nogi", kind: "b" },
-      gn: { label: "GI / NOGI", cls: "gn", kind: "b", sub: "FULL SPARRING", trial: false },
-      nogi_sp: { label: "NOGI", cls: "nogi-sp", kind: "b", sub: "FULL SPARRING", trial: false },
+      gn: { label: "GI / NOGI", cls: "gn", kind: "b", sub: "FULL SPARRING" },
+      nogi_sp: { label: "NOGI", cls: "nogi-sp", kind: "b", sub: "FULL SPARRING" },
       str: { label: "STRIKING", cls: "str", kind: "s" },
       open: { label: "OPEN MAT", cls: "open", kind: "o", sub: "GI / NOGI", trial: false }
     };
