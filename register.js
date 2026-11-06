@@ -16,6 +16,10 @@ function init() {
       c1: "Thông tin", fName: "Họ tên", fPhone: "Số điện thoại", fDob: "Ngày tháng năm sinh", dDay: "Ngày", dMonth: "Tháng", dYear: "Năm", eDob: "Chọn ngày tháng năm sinh hợp lệ", c2: "Gói đăng ký",
       planNote: "Bảng giá hiệu lực từ tháng 11/2026. Gói 3 và 6 tháng áp dụng cho gói tập theo khung giờ.",
       g_monthly: "Đăng ký theo tháng", g_allaccess: "All-access", g_dropin: "Drop-in", g_package: "Đăng ký gói",
+      cPass1: "Chọn ngày tập", cPass2: "Chọn ngày và lớp tập", pickClass: "Chọn lớp",
+      passNote1: "Pass có giá trị trong đúng ngày bạn chọn, tập tất cả các lớp trong ngày. Ngày không có lớp bị mờ; chọn được trong 60 ngày tới.",
+      passNote2: "Pass chỉ dùng cho đúng lớp và ngày bạn chọn. Ngày không có lớp bị mờ; chọn được trong 60 ngày tới.",
+      pickedDay: "Ngày đã chọn", noDay: "Chưa chọn ngày", ePassDate: "Chọn ngày tập", ePassSlot: "Chọn một lớp", sumDay: "Ngày tập", sumAllDay: "Tất cả các lớp trong ngày",
       c3: "Chọn lớp", days: "Ngày tập", pickSlot: "Chọn 1 lớp theo khung giờ",
       openMat: (l, t, d) => `${l} · ${t} · ${d} (miễn phí cho mọi học viên)`,
       c4: "Bạn biết SGS thông qua đâu?", srcOther: "Nhập nguồn khác", go: "Đăng ký", sending: "Đang gửi...",
@@ -35,6 +39,10 @@ function init() {
       c1: "Your details", fName: "Full name", fPhone: "Phone number", fDob: "Date of birth", dDay: "Day", dMonth: "Month", dYear: "Year", eDob: "Choose a valid date of birth", c2: "Plan",
       planNote: "Prices effective Nov 2026. 3- and 6-month packages apply to time-slot plans.",
       g_monthly: "Monthly", g_allaccess: "All-access", g_dropin: "Drop-in", g_package: "Packages",
+      cPass1: "Choose your day", cPass2: "Choose your day and class", pickClass: "Choose a class",
+      passNote1: "The pass is valid on the day you choose, for every class that day. Days without classes are greyed out; you can book up to 60 days ahead.",
+      passNote2: "The pass is valid for the class and day you choose only. Days without classes are greyed out; you can book up to 60 days ahead.",
+      pickedDay: "Selected day", noDay: "No day selected", ePassDate: "Choose a day", ePassSlot: "Pick one class", sumDay: "Class day", sumAllDay: "Every class that day",
       c3: "Choose your class", days: "Training days", pickSlot: "Pick one time slot",
       openMat: (l, t, d) => `${l} · ${t} · ${d} (free for all members)`,
       c4: "How did you hear about SGS?", srcOther: "Please specify", go: "Register", sending: "Sending...",
@@ -62,6 +70,7 @@ function init() {
   let lang = "vi";
   try { const s = localStorage.getItem("sgs_lang"); if (s === "en" || s === "vi") lang = s; } catch (e) { /* storage bị chặn */ }
   let cfg = null, plan = null, pattern = null, slotName = "", source = null, busy = false, done = null;
+  let passDate = "", passSlot = "", calM = null;   // pass drop-in: ngày đã chọn (yyyy-MM-dd), lớp đã chọn, tháng đang xem trong lịch
   const errs = {};
   let dup = null, formErr = "";
   const $ = (s) => mount.querySelector(s);
@@ -89,7 +98,7 @@ function init() {
       const r = await fetch(API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ fn: "register", data: payload }) });
       return await r.json();
     } catch (e) {
-      // trình duyệt chặn đọc phản hồi POST -> gửi lại qua JSONP (cùng rid nên server không tạo 2 học viên)
+      // trình duyệt chặn đọc phản hồi POST -> gửi lại qua JSONP (server tự chặn trùng nên không tạo 2 học viên)
       return jsonp({ api: "register", data: JSON.stringify(payload) });
     }
   }
@@ -125,6 +134,15 @@ function init() {
           <div id="rgSlotWrap" class="hidden"><label class="rg-f" style="margin-top:18px" data-t="pickSlot"></label><div id="rgSlots"></div></div>
           <div class="rg-err" id="e_slots"></div>
           <div class="rg-note" id="rgOpenMat"></div>
+        </div>
+        <div class="rg-card hidden" id="rgPassBox">
+          <h3><i>3</i><span id="rgPassTitle"></span></h3>
+          <div class="rg-note" id="rgPassNote" style="margin:-6px 0 10px"></div>
+          <div class="rg-cal" id="rgCal"></div>
+          <div class="rg-picked" id="rgPicked"></div>
+          <div class="rg-err" id="e_passDate"></div>
+          <div id="rgPassSlotWrap" class="hidden"><label class="rg-f" style="margin-top:18px" data-t="pickClass"></label><div id="rgPassSlots"></div></div>
+          <div class="rg-err" id="e_passSlot"></div>
         </div>
         <div class="rg-card">
           <h3><i id="rgNSrc">3</i><span data-t="c4"></span></h3>
@@ -185,7 +203,9 @@ function init() {
       box.appendChild(radioRow("rgplan", p.code, lang === "vi" ? p.vi : p.en, money(p.price),
         [{ text: lang === "vi" ? p.perk : p.perkEn, perk: true }], plan && plan.code === p.code, () => {
           plan = p; $("#rgSlotBox").classList.toggle("hidden", !p.slots);
-          numberCards(); setErr("plan", ""); setErr("slots", ""); setErr("pattern", "");
+          $("#rgPassBox").classList.toggle("hidden", p.group !== "dropin");
+          if (p.group === "dropin") { passSlot = ""; if (passDate && !dayOk(passDate)) passDate = ""; renderPass(); }
+          numberCards(); setErr("plan", ""); setErr("slots", ""); setErr("pattern", ""); setErr("passDate", ""); setErr("passSlot", "");
         }));
     });
   }
@@ -222,7 +242,60 @@ function init() {
     })));
     $("#rgSrcOther").classList.toggle("hidden", !(source && source.text));
   }
-  function numberCards() { const n = plan && plan.slots ? 4 : 3; $("#rgNSrc").textContent = n; $("#rgNWav").textContent = n + 1; }
+  function numberCards() { const n = plan && (plan.slots || plan.group === "dropin") ? 4 : 3; $("#rgNSrc").textContent = n; $("#rgNWav").textContent = n + 1; }
+
+  /* ---------- pass drop-in: lịch mini chọn ngày + chọn lớp của ngày đó ---------- */
+  const isoOf = (y, m, d) => y + "-" + String(m).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+  const dowIso = (iso) => { const [y, m, d] = iso.split("-").map(Number); return (new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7; };
+  const addDaysIso = (iso, n) => { const [y, m, d] = iso.split("-").map(Number); const x = new Date(Date.UTC(y, m - 1, d + n)); return isoOf(x.getUTCFullYear(), x.getUTCMonth() + 1, x.getUTCDate()); };
+  const hmMin = (x) => { const [h, m] = x.split(":").map(Number); return h * 60 + m; };
+  // lớp mà pass dùng được vào ngày đó (1 lớp: không tính Open Mat miễn phí; hôm nay: bỏ lớp đã kết thúc)
+  function passClasses(iso) {
+    const dow = dowIso(iso), one = plan && plan.code === "ONECLASS";
+    return cfg.schedule.filter((s) => !!s.days[dow] && !(one && s.free) && !(iso === cfg.today && hmMin(s.end) <= cfg.nowMin));
+  }
+  const dayOk = (iso) => iso >= cfg.today && iso <= addDaysIso(cfg.today, cfg.passMax) && passClasses(iso).length > 0;
+  const fmtDay = (iso) => { const [y, m, d] = iso.split("-"); return DAYN[lang][dowIso(iso)] + " " + d + "/" + m + "/" + y; };
+  function renderPass() {
+    if (!cfg || !plan || plan.group !== "dropin") return;
+    const one = plan.code === "ONECLASS";
+    $("#rgPassTitle").textContent = t(one ? "cPass2" : "cPass1");
+    $("#rgPassNote").textContent = t(one ? "passNote2" : "passNote1");
+    if (!calM) { const p = (passDate || cfg.today).split("-"); calM = { y: +p[0], m: +p[1] }; }
+    const box = $("#rgCal"); box.innerHTML = "";
+    const tp = cfg.today.split("-").map(Number), mp = addDaysIso(cfg.today, cfg.passMax).split("-").map(Number);
+    const first = tp[0] * 12 + tp[1], last = mp[0] * 12 + mp[1], cur = calM.y * 12 + calM.m;
+    const head = el("div", "rg-ch");
+    const prev = el("button", "", "‹"), next = el("button", "", "›");
+    prev.type = next.type = "button"; prev.disabled = cur <= first; next.disabled = cur >= last;
+    prev.onclick = () => { calM = calM.m === 1 ? { y: calM.y - 1, m: 12 } : { y: calM.y, m: calM.m - 1 }; renderPass(); };
+    next.onclick = () => { calM = calM.m === 12 ? { y: calM.y + 1, m: 1 } : { y: calM.y, m: calM.m + 1 }; renderPass(); };
+    head.append(prev, el("b", "", MON[lang][calM.m - 1] + " " + calM.y), next); box.appendChild(head);
+    const g = el("div", "rg-g");
+    DAYN[lang].forEach((n) => g.appendChild(el("div", "rg-wd", n)));
+    const lead = dowIso(isoOf(calM.y, calM.m, 1)), dim = new Date(Date.UTC(calM.y, calM.m, 0)).getUTCDate();
+    for (let i = 0; i < lead; i++) g.appendChild(el("div", "rg-blank"));
+    for (let d = 1; d <= dim; d++) {
+      const iso = isoOf(calM.y, calM.m, d), ok = dayOk(iso);
+      const b = el("button", "rg-d" + (ok ? "" : " off") + (iso === cfg.today ? " today" : "") + (iso === passDate ? " on" : ""), String(d));
+      b.type = "button";
+      if (ok) b.onclick = () => {
+        passDate = iso;
+        if (passSlot && !passClasses(iso).some((s) => s.name === passSlot)) passSlot = "";
+        setErr("passDate", ""); renderPass();
+      }; else b.disabled = true;
+      g.appendChild(b);
+    }
+    box.appendChild(g);
+    $("#rgPicked").textContent = passDate ? t("pickedDay") + ": " + fmtDay(passDate) : t("noDay");
+    const wrap = $("#rgPassSlotWrap"), list = $("#rgPassSlots"); list.innerHTML = "";
+    wrap.classList.toggle("hidden", !(one && passDate));
+    if (one && passDate) {
+      const dow = dowIso(passDate);
+      passClasses(passDate).forEach((s) => list.appendChild(radioRow("rgpslot", s.name, slotLabel(s) + " · " + s.start + "–" + s.end, "",
+        [{ text: s.days[dow] }], passSlot === s.name, () => { passSlot = s.name; setErr("passSlot", ""); })));
+    }
+  }
 
   /* ---------- ngày sinh (3 ô chọn, giữ giá trị khi đổi ngôn ngữ) ---------- */
   function renderDob() {
@@ -253,7 +326,7 @@ function init() {
     if (inp) $(inp).classList.toggle("bad", !!key && !(f === "source" && $(inp).classList.contains("hidden")));
   }
   function clearErrs() {
-    ["name", "phone", "email", "dob", "plan", "pattern", "slots", "source", "waiver"].forEach((f) => setErr(f, ""));
+    ["name", "phone", "email", "dob", "plan", "pattern", "slots", "passDate", "passSlot", "source", "waiver"].forEach((f) => setErr(f, ""));
     formErr = ""; $("#e_form").textContent = ""; dup = null; $("#rgDup").classList.add("hidden");
   }
   function renderDup() {
@@ -279,7 +352,7 @@ function init() {
   function render() {
     applyStatic();
     if (!cfg) return;
-    renderDob(); renderPlans(); renderPatterns(); renderSlots(); renderOpenMat(); renderSources(); numberCards();
+    renderDob(); renderPlans(); renderPatterns(); renderSlots(); renderOpenMat(); renderSources(); renderPass(); numberCards();
     Object.keys(errs).forEach((f) => { $("#e_" + f).textContent = t(errs[f]); });
     $("#e_form").textContent = formErr ? t(formErr) : ""; renderDup();
     if (done) fillDone();
@@ -298,6 +371,10 @@ function init() {
     else if (plan.slots) {
       if (!pattern) { setErr("pattern", "ePattern"); ok = false; }
       else if (!slotName) { setErr("slots", "eSlot"); ok = false; }
+    }
+    if (plan && plan.group === "dropin") {
+      if (!passDate || !dayOk(passDate)) { setErr("passDate", "ePassDate"); ok = false; }
+      else if (plan.code === "ONECLASS" && !passSlot) { setErr("passSlot", "ePassSlot"); ok = false; }
     }
     if (!source) { setErr("source", "eSource"); ok = false; }
     else if (source.text && !$("#rgSrcOther").value.trim()) { setErr("source", "eSourceOther"); ok = false; }
@@ -332,6 +409,11 @@ function init() {
       const s = cfg.schedule.find((x) => x.name === d.slot);
       lines.push(T[lang].daysWord(d.pattern) + " · " + (s ? slotLabel(s) + " " + s.start + "–" + s.end : d.slot));
     }
+    if (d.plan.group === "dropin" && d.passDate) {
+      lines.push(t("sumDay") + ": " + fmtDay(d.passDate));
+      const ps = cfg.schedule.find((x) => x.name === d.passSlot);
+      lines.push(ps ? slotLabel(ps) + " " + ps.start + "–" + ps.end : t("sumAllDay"));
+    }
     $("#rgSum").textContent = lines.join("\n");
     $("#rgAmt").textContent = money(d.plan.price);
     $("#rgNote").textContent = d.id + " " + fold(d.name).toUpperCase();
@@ -346,16 +428,15 @@ function init() {
     const payload = {
       name: $("#rgName").value, phone: $("#rgPhone").value, email: $("#rgEmail").value, dob: dobValue(), pin: "",
       plan: plan.code, pattern: plan.slots && pattern ? pattern.code : "", slot: plan.slots ? slotName : "",
-      source: source.code, sourceOther: source.text ? $("#rgSrcOther").value : "", waiver: $("#rgAgree").checked,
-      // mã riêng cho lần bấm này: nếu POST lỗi và gửi lại qua JSONP, server trả lại kết quả cũ thay vì tạo thêm 1 dòng
-      rid: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)
+      passDate: plan.group === "dropin" ? passDate : "", passSlot: plan.code === "ONECLASS" ? passSlot : "",
+      source: source.code, sourceOther: source.text ? $("#rgSrcOther").value : "", waiver: $("#rgAgree").checked
     };
     let r;
     try { r = await send(payload); } catch (e) { r = null; }
     busy = false; $("#rgGo").disabled = false; $("#rgGo").textContent = t("go");
     if (!r) { formErr = "eConn"; $("#e_form").textContent = t("eConn"); return; }
     if (r.ok) {
-      done = { id: r.id, name: r.name, plan, pattern, slot: slotName };
+      done = { id: r.id, name: r.name, plan, pattern, slot: slotName, passDate, passSlot };
       fillDone(); showQr();
       $("#rgForm").classList.add("hidden"); $("#rgDone").classList.remove("hidden"); mount.querySelector(".rg-head").classList.add("hidden");
       mount.closest("section").scrollIntoView({ behavior: "smooth", block: "start" });

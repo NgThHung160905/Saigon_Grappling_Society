@@ -122,3 +122,26 @@ html.peek-open { overflow: hidden; }
 /* bớt khoảng trống giữa nút xem lịch và các tab đăng ký */
 #lich + #dang-ky { padding-top: 56px; }
 #lich + #dang-ky .reg-tabs { margin-top: 0; }
+
+/* pass drop-in: lịch mini */
+#hoc-vien .rg-cal { border: 1.5px solid var(--line); border-radius: 8px; padding: 12px; background: #fff; }
+#hoc-vien .rg-ch { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+#hoc-vien .rg-ch b { font-size: 1rem; color: var(--ink); }
+#hoc-vien .rg-ch button { width: 40px; height: 40px; border-radius: 8px; border: 1.5px solid var(--line); background: #fff; color: var(--blue); font-size: 1.2rem; cursor: pointer; }
+#hoc-vien .rg-ch button:disabled { opacity: .35; cursor: default; }
+#hoc-vien .rg-g { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+#hoc-vien .rg-wd { text-align: center; font-size: .74rem; font-weight: 700; color: var(--muted); padding: 4px 0; }
+#hoc-vien .rg-d { height: 42px; border-radius: 8px; border: 1.5px solid transparent; background: var(--blue-tint); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; padding: 0; }
+#hoc-vien .rg-d.off { background: transparent; color: #b3b9c8; text-decoration: line-through; cursor: default; }
+#hoc-vien .rg-d.today { border-color: var(--blue); }
+#hoc-vien .rg-d.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+#hoc-vien .rg-blank { height: 42px; }
+#hoc-vien .rg-picked { margin-top: 10px; font-weight: 600; color: var(--ink); min-height: 1.2em; }
+/* trong #dang-ky (nền tối): giữ chữ của lịch mini ở màu tối */
+.reg #hoc-vien .rg-cal { color: var(--ink); }
+.reg #hoc-vien .rg-ch b, .reg #hoc-vien .rg-picked { color: var(--ink); }
+.reg #hoc-vien .rg-wd { color: var(--muted); }
+.reg #hoc-vien .rg-d { color: var(--ink); }
+.reg #hoc-vien .rg-d.off { color: #b3b9c8; }
+.reg #hoc-vien .rg-d.on { color: #fff; }
+.reg #hoc-vien .rg-ch button { color: var(--blue); }
