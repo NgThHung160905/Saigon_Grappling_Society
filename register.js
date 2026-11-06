@@ -89,7 +89,7 @@ function init() {
       const r = await fetch(API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ fn: "register", data: payload }) });
       return await r.json();
     } catch (e) {
-      // trình duyệt chặn đọc phản hồi POST -> gửi lại qua JSONP (server tự chặn trùng nên không tạo 2 học viên)
+      // trình duyệt chặn đọc phản hồi POST -> gửi lại qua JSONP (cùng rid nên server không tạo 2 học viên)
       return jsonp({ api: "register", data: JSON.stringify(payload) });
     }
   }
@@ -346,7 +346,9 @@ function init() {
     const payload = {
       name: $("#rgName").value, phone: $("#rgPhone").value, email: $("#rgEmail").value, dob: dobValue(), pin: "",
       plan: plan.code, pattern: plan.slots && pattern ? pattern.code : "", slot: plan.slots ? slotName : "",
-      source: source.code, sourceOther: source.text ? $("#rgSrcOther").value : "", waiver: $("#rgAgree").checked
+      source: source.code, sourceOther: source.text ? $("#rgSrcOther").value : "", waiver: $("#rgAgree").checked,
+      // mã riêng cho lần bấm này: nếu POST lỗi và gửi lại qua JSONP, server trả lại kết quả cũ thay vì tạo thêm 1 dòng
+      rid: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)
     };
     let r;
     try { r = await send(payload); } catch (e) { r = null; }
