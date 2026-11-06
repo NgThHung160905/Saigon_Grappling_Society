@@ -75,8 +75,6 @@
 .reg .rg-head p { color: var(--on-dark-muted); }
 @media (max-width: 520px) { .reg-tabs { display: flex; } .reg-tab { flex: 1; padding: 13px 10px; font-size: .74rem; } }
 .reg .rg-box { margin-inline: 0; }
-/* Bản đồ & chỉ đường bên dưới form học viên */
-.reg .reg-where { max-width: 760px; margin-top: 34px; }
 
 /* Trong #dang-ky (nền tối) mọi chữ bên trong thẻ trắng phải dùng màu tối: chặn `.reg .t` (chữ trắng) và màu thừa hưởng từ .reg */
 .reg #hoc-vien .rg-card { color: var(--text); }

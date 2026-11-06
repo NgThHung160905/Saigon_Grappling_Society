@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/images/mono-blue.png">
   <title>Đăng ký | Saigon Grappling Society</title>
   <meta name="description"
-    content="Đăng ký học viên tại Saigon Grappling Society. Xem lịch tập ngay khi đăng ký.">
+    content="Đăng ký tập thử 1 buổi hoặc đăng ký học viên tại Saigon Grappling Society. Xem lịch tập ngay khi đăng ký.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://saigon-grappling-society.vercel.app/">
   <meta property="og:title" content="Saigon Grappling Society">
@@ -162,20 +162,131 @@
     </section>
 
 
-    <section id="dang-ky" class="reg" data-mode="member">
+    <section id="dang-ky" class="reg">
       <video class="reg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
         <source src="/images/cloud-flow.mp4" type="video/mp4">
       </video>
       <div class="reg-overlay" aria-hidden="true"></div>
       <div class="wrap">
+        <div class="reg-tabs" role="tablist" aria-label="Loại đăng ký">
+          <button type="button" role="tab" class="reg-tab on" data-reg-tab="trial" aria-selected="true" data-i18n="reg_tab_trial">Tập thử 1 buổi</button>
+          <button type="button" role="tab" class="reg-tab" data-reg-tab="member" aria-selected="false" data-i18n="reg_tab_member">Đăng ký học viên</button>
+        </div>
+        <div class="reg-head">
+          <h2 class="t t-xl" style="font-size:clamp(3rem,9vw,6.4rem);line-height:1.05" data-i18n="reg_title">Đăng ký<br><em>tập thử 1 buổi</em></h2>
+        </div>
         <div id="hoc-vien" class="rg-panel"><div class="rg-box"></div></div>
-        <div class="where reg-where">
-          <div class="addr">
-            <div><b id="addr-name"></b><span id="addr-line"></span></div>
-            <a class="btn lime sm" id="addr-link" target="_blank" rel="noopener" href="#"><span data-i18n="addr_directions">Chỉ đường</span></a>
+        <div class="reg-grid">
+          <form id="form" novalidate>
+            <div class="field">
+              <span class="lg" data-i18n="lbl_program">Bộ môn</span>
+              <div class="seg" role="radiogroup" aria-label="Bộ môn">
+                <div><input type="radio" name="program" id="p-bjj" value="BJJ" checked><label for="p-bjj">BJJ</label>
+                </div>
+                <div><input type="radio" name="program" id="p-str" value="Striking"><label for="p-str">Striking</label>
+                </div>
+              </div>
+            </div>
+            <div class="field date-field">
+              <label for="date" data-i18n="lbl_date">Chọn ngày <span class="date-format-hint">(DD/MM/YY)</span></label>
+              <div class="date-input-wrap" id="date-wrap">
+                <input type="text" id="date" name="date" placeholder="DD/MM/YY" inputmode="numeric" maxlength="8"
+                  autocomplete="off" required>
+                <button type="button" class="date-picker-btn" id="date-btn" aria-label="Mở lịch chọn ngày">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </button>
+
+                <!-- Custom Calendar Popover -->
+                <div class="cal-popover" id="cal-popover" hidden>
+                  <div class="cal-popover-head">
+                    <button type="button" class="cal-popover-btn" id="cal-prev" aria-label="Tháng trước">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <div class="cal-popover-title" id="cal-title"></div>
+                    <button type="button" class="cal-popover-btn" id="cal-next" aria-label="Tháng sau">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  </div>
+                  <div class="cal-weekdays">
+                    <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
+                  </div>
+                  <div class="cal-days" id="cal-days"></div>
+                  <div class="cal-info" id="cal-info">
+                    <span class="cal-info-dot" id="cal-info-dot"></span>
+                    <span id="cal-info-text">Chỉ hiện ngày có lớp</span>
+                  </div>
+                </div>
+              </div>
+              <div class="date-quick-wrap" id="date-quick-wrap"></div>
+              <div class="err" data-err="date"></div>
+            </div>
+            <div class="field"><label for="slot" data-i18n="lbl_slot">Khung giờ</label><select id="slot" name="slot" required></select>
+              <div class="err" data-err="slot"></div>
+            </div>
+            <div class="field"><label for="name" data-i18n="lbl_name">Họ và tên</label><input type="text" id="name" name="name"
+                autocomplete="name" required>
+              <div class="err" data-err="name"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="phone" data-i18n="lbl_phone">Số điện thoại</label><input type="tel" id="phone" name="phone"
+                  autocomplete="tel" inputmode="tel" placeholder="09xx xxx xxx" required>
+                <div class="err" data-err="phone"></div>
+              </div>
+              <div class="field"><label for="email" data-i18n="lbl_email">Email</label><input type="email" id="email" name="email"
+                  autocomplete="email" required>
+                <div class="err" data-err="email"></div>
+              </div>
+            </div>
+            <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div id="status" role="status" hidden></div>
+            <button class="btn" type="submit" id="submit" data-i18n="btn_submit">Gửi đăng ký</button>
+          </form>
+
+          <div class="ticket" id="ticket" hidden tabindex="-1">
+            <div class="tk-top"><img src="/images/logo-white.png" alt="Saigon Grappling Society"><span class="tk-ok"><svg
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12.5l4.5 4.5L19 7.5" />
+                </svg></span></div>
+            <div class="tk-body">
+              <h3 class="t" data-i18n="tk_title">Cảm ơn bạn<br>đã đăng ký.</h3>
+              <p class="tk-msg" data-i18n="tk_msg">Hãy screenshot lại trang này và đưa cho HLV đứng lớp.</p>
+              <dl class="tk-info">
+                <div>
+                  <dt data-i18n="tk_name">Tên</dt>
+                  <dd id="tk-name"></dd>
+                </div>
+                <div>
+                  <dt data-i18n="tk_phone">SĐT</dt>
+                  <dd id="tk-phone"></dd>
+                </div>
+                <div>
+                  <dt data-i18n="tk_date">Ngày tập</dt>
+                  <dd id="tk-date"></dd>
+                </div>
+                <div>
+                  <dt data-i18n="tk_class">Lớp đã đăng ký</dt>
+                  <dd id="tk-class"></dd>
+                </div>
+              </dl>
+              <p class="tk-dev" id="tk-dev" hidden data-i18n="tk_dev">Chế độ thử: đăng ký chưa được lưu vào Google Sheet.</p>
+              <button type="button" class="tk-again" id="tk-again" data-i18n="tk_again">Đăng ký cho người khác</button>
+            </div>
           </div>
-          <div class="map"><iframe id="map" title="Bản đồ Saigon Grappling Society" loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+
+          <div class="where">
+            <div class="addr">
+              <div><b id="addr-name"></b><span id="addr-line"></span></div>
+              <a class="btn lime sm" id="addr-link" target="_blank" rel="noopener" href="#"><span data-i18n="addr_directions">Chỉ đường</span></a>
+            </div>
+            <div class="map"><iframe id="map" title="Bản đồ Saigon Grappling Society" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+          </div>
         </div>
       </div>
     </section>
@@ -279,6 +390,7 @@
   <script type="module" src="/cinematic.js"></script>
   <script type="module" src="/site.js"></script>
   <script type="module" src="/chatbox.js"></script>
+  <script type="module" src="/trial-form.js"></script>
   <script type="module" src="/register.js"></script>
   <script type="module" src="/schedule-peek.js"></script>
 </body>
